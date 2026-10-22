@@ -1,0 +1,12 @@
+/*
+ * @shadow-js/ui theme: shadcn's neutral base color, the Tailwind v4 token mapping and the base
+ * layer. Import it after Tailwind:
+ *
+ *   @import "tailwindcss";
+ *   @import "@shadow-js/ui/theme.css";
+ *   @import "@shadow-js/ui/animations.css";
+ *
+ * For another base color import `@shadow-js/ui/themes/<zinc|slate|stone|gray>.css` after this file.
+ */
+@import "./themes/neutral.css";
+@import "./theme-core.css";

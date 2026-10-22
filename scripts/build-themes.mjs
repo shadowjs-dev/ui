@@ -1,0 +1,168 @@
+// Generates styles/themes/<base>.css: the shadcn color variables for each base color, from the
+// Tailwind v4 palettes. `node scripts/build-themes.mjs` rewrites the files; a test fails when they
+// drift from this generator.
+import { mkdirSync, writeFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+
+/** Tailwind v4 oklch palettes: shade -> "L C H". */
+const PALETTES = {
+  neutral: {
+    50: "0.985 0 0",
+    100: "0.97 0 0",
+    200: "0.922 0 0",
+    300: "0.87 0 0",
+    400: "0.708 0 0",
+    500: "0.556 0 0",
+    600: "0.439 0 0",
+    700: "0.371 0 0",
+    800: "0.269 0 0",
+    900: "0.205 0 0",
+    950: "0.145 0 0",
+  },
+  zinc: {
+    50: "0.985 0 0",
+    100: "0.967 0.001 286.375",
+    200: "0.92 0.004 286.32",
+    300: "0.871 0.006 286.286",
+    400: "0.705 0.015 286.067",
+    500: "0.552 0.016 285.938",
+    600: "0.442 0.017 285.786",
+    700: "0.37 0.013 285.805",
+    800: "0.274 0.006 286.033",
+    900: "0.21 0.006 285.885",
+    950: "0.141 0.005 285.823",
+  },
+  slate: {
+    50: "0.984 0.003 247.858",
+    100: "0.968 0.007 247.896",
+    200: "0.929 0.013 255.508",
+    300: "0.869 0.022 252.894",
+    400: "0.704 0.04 256.788",
+    500: "0.554 0.046 257.417",
+    600: "0.446 0.043 257.281",
+    700: "0.372 0.044 257.287",
+    800: "0.279 0.041 260.031",
+    900: "0.208 0.042 265.755",
+    950: "0.129 0.042 264.695",
+  },
+  stone: {
+    50: "0.985 0.001 106.423",
+    100: "0.97 0.001 106.424",
+    200: "0.923 0.003 48.717",
+    300: "0.869 0.005 56.366",
+    400: "0.709 0.01 56.259",
+    500: "0.553 0.013 58.071",
+    600: "0.444 0.011 73.639",
+    700: "0.374 0.01 67.558",
+    800: "0.268 0.007 34.298",
+    900: "0.216 0.006 56.043",
+    950: "0.147 0.004 49.25",
+  },
+  gray: {
+    50: "0.985 0.002 247.839",
+    100: "0.967 0.003 264.542",
+    200: "0.928 0.006 264.531",
+    300: "0.872 0.01 258.338",
+    400: "0.707 0.022 261.325",
+    500: "0.551 0.027 264.364",
+    600: "0.446 0.03 256.802",
+    700: "0.373 0.034 259.733",
+    800: "0.278 0.033 256.848",
+    900: "0.21 0.034 264.665",
+    950: "0.13 0.028 261.692",
+  },
+};
+
+/** The base colors the CLI offers, in documentation order. */
+export const BASE_COLORS = Object.keys(PALETTES);
+
+const WHITE = "1 0 0";
+
+/**
+ * The CSS of one base color: `:root` and `.dark` variable sets.
+ * @param {string} base One of BASE_COLORS.
+ * @returns {string}
+ */
+export function renderTheme(base) {
+  const p = PALETTES[base];
+  if (p === undefined) throw new Error(`Unknown base color "${base}"`);
+  const o = (value, alpha) => `oklch(${value}${alpha === undefined ? "" : ` / ${alpha}`})`;
+  const light = {
+    background: o(WHITE),
+    foreground: o(p[950]),
+    card: o(WHITE),
+    "card-foreground": o(p[950]),
+    popover: o(WHITE),
+    "popover-foreground": o(p[950]),
+    primary: o(p[900]),
+    "primary-foreground": o(p[50]),
+    secondary: o(p[100]),
+    "secondary-foreground": o(p[900]),
+    muted: o(p[100]),
+    "muted-foreground": o(p[600]),
+    accent: o(p[100]),
+    "accent-foreground": o(p[900]),
+    destructive: o("0.546 0.22 27.325"),
+    border: o(p[200]),
+    input: o(p[200]),
+    ring: o(p[400]),
+    "chart-1": o("0.646 0.222 41.116"),
+    "chart-2": o("0.6 0.118 184.704"),
+    "chart-3": o("0.398 0.07 227.392"),
+    "chart-4": o("0.828 0.189 84.429"),
+    "chart-5": o("0.769 0.188 70.08"),
+    sidebar: o(p[50]),
+    "sidebar-foreground": o(p[950]),
+    "sidebar-primary": o(p[900]),
+    "sidebar-primary-foreground": o(p[50]),
+    "sidebar-accent": o(p[100]),
+    "sidebar-accent-foreground": o(p[900]),
+    "sidebar-border": o(p[200]),
+    "sidebar-ring": o(p[400]),
+  };
+  const dark = {
+    background: o(p[950]),
+    foreground: o(p[50]),
+    card: o(p[900]),
+    "card-foreground": o(p[50]),
+    popover: o(p[900]),
+    "popover-foreground": o(p[50]),
+    primary: o(p[200]),
+    "primary-foreground": o(p[900]),
+    secondary: o(p[800]),
+    "secondary-foreground": o(p[50]),
+    muted: o(p[800]),
+    "muted-foreground": o(p[400]),
+    accent: o(p[800]),
+    "accent-foreground": o(p[50]),
+    destructive: o("0.704 0.191 22.216"),
+    border: o(WHITE, "10%"),
+    input: o(WHITE, "15%"),
+    ring: o(p[500]),
+    "chart-1": o("0.488 0.243 264.376"),
+    "chart-2": o("0.696 0.17 162.48"),
+    "chart-3": o("0.769 0.188 70.08"),
+    "chart-4": o("0.627 0.265 303.9"),
+    "chart-5": o("0.645 0.246 16.439"),
+    sidebar: o(p[900]),
+    "sidebar-foreground": o(p[50]),
+    "sidebar-primary": o("0.488 0.243 264.376"),
+    "sidebar-primary-foreground": o(p[50]),
+    "sidebar-accent": o(p[800]),
+    "sidebar-accent-foreground": o(p[50]),
+    "sidebar-border": o(WHITE, "10%"),
+    "sidebar-ring": o(p[500]),
+  };
+  const block = (selector, vars, extra = "") =>
+    `${selector} {\n${extra}${Object.entries(vars)
+      .map(([name, value]) => `  --${name}: ${value};`)
+      .join("\n")}\n}\n`;
+  return `/* ${base} base color. Generated by scripts/build-themes.mjs. */\n${block(":root", light, "  --radius: 0.625rem;\n")}\n${block(".dark", dark)}`;
+}
+
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  const dir = join(dirname(fileURLToPath(import.meta.url)), "..", "styles", "themes");
+  mkdirSync(dir, { recursive: true });
+  for (const base of BASE_COLORS) writeFileSync(join(dir, `${base}.css`), renderTheme(base));
+}

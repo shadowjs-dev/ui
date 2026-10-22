@@ -1,0 +1,321 @@
+/*
+ * @shadow-js/ui animations: the small subset of tw-animate-css the components use, so no extra
+ * package is needed. `data-[state=open]:animate-in data-[state=closed]:animate-out` plus
+ * `fade-*`, `zoom-*` and `slide-*` modifiers drive every overlay; `animate-accordion-*` drive
+ * the accordion and collapsible. Reduced motion switches all of it off.
+ */
+
+@theme inline {
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+  --animate-collapsible-down: collapsible-down 0.2s ease-out;
+  --animate-collapsible-up: collapsible-up 0.2s ease-out;
+
+  @keyframes accordion-down {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--primitives-accordion-content-height);
+    }
+  }
+  @keyframes accordion-up {
+    from {
+      height: var(--primitives-accordion-content-height);
+    }
+    to {
+      height: 0;
+    }
+  }
+  @keyframes collapsible-down {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--primitives-collapsible-content-height);
+    }
+  }
+  @keyframes collapsible-up {
+    from {
+      height: var(--primitives-collapsible-content-height);
+    }
+    to {
+      height: 0;
+    }
+  }
+}
+
+@keyframes enter {
+  from {
+    opacity: var(--tw-enter-opacity, 1);
+    transform: translate3d(var(--tw-enter-translate-x, 0), var(--tw-enter-translate-y, 0), 0)
+      scale3d(var(--tw-enter-scale, 1), var(--tw-enter-scale, 1), var(--tw-enter-scale, 1));
+  }
+}
+@keyframes exit {
+  to {
+    opacity: var(--tw-exit-opacity, 1);
+    transform: translate3d(var(--tw-exit-translate-x, 0), var(--tw-exit-translate-y, 0), 0)
+      scale3d(var(--tw-exit-scale, 1), var(--tw-exit-scale, 1), var(--tw-exit-scale, 1));
+  }
+}
+
+/*
+ * `backwards`, not `both`: a forwards fill keeps `transform` animated (an identity matrix) for as
+ * long as the element lives, which makes it the containing block of its `position: fixed`
+ * descendants. A submenu inside a scrolling menu was then clipped by that menu's overflow.
+ */
+@utility animate-in {
+  animation-name: enter;
+  animation-duration: var(--tw-animation-duration, var(--tw-duration, 150ms));
+  animation-timing-function: var(--tw-ease, ease);
+  animation-fill-mode: backwards;
+}
+
+@utility animate-out {
+  animation-name: exit;
+  animation-duration: var(--tw-animation-duration, var(--tw-duration, 150ms));
+  animation-timing-function: var(--tw-ease, ease);
+  animation-fill-mode: both;
+}
+
+@utility fade-in {
+  --tw-enter-opacity: 0;
+}
+@utility fade-in-* {
+  --tw-enter-opacity: calc(--value(integer) / 100);
+}
+@utility fade-out {
+  --tw-exit-opacity: 0;
+}
+@utility fade-out-* {
+  --tw-exit-opacity: calc(--value(integer) / 100);
+}
+
+@utility zoom-in {
+  --tw-enter-scale: 0;
+}
+@utility zoom-in-* {
+  --tw-enter-scale: calc(--value(integer) / 100);
+}
+@utility zoom-out {
+  --tw-exit-scale: 0;
+}
+@utility zoom-out-* {
+  --tw-exit-scale: calc(--value(integer) / 100);
+}
+
+@utility slide-in-from-top {
+  --tw-enter-translate-y: -100%;
+}
+@utility slide-in-from-top-* {
+  --tw-enter-translate-y: calc(--spacing(--value(integer)) * -1);
+}
+@utility slide-in-from-bottom {
+  --tw-enter-translate-y: 100%;
+}
+@utility slide-in-from-bottom-* {
+  --tw-enter-translate-y: --spacing(--value(integer));
+}
+@utility slide-in-from-left {
+  --tw-enter-translate-x: -100%;
+}
+@utility slide-in-from-left-* {
+  --tw-enter-translate-x: calc(--spacing(--value(integer)) * -1);
+}
+@utility slide-in-from-right {
+  --tw-enter-translate-x: 100%;
+}
+@utility slide-in-from-right-* {
+  --tw-enter-translate-x: --spacing(--value(integer));
+}
+@utility slide-out-to-top {
+  --tw-exit-translate-y: -100%;
+}
+@utility slide-out-to-top-* {
+  --tw-exit-translate-y: calc(--spacing(--value(integer)) * -1);
+}
+@utility slide-out-to-bottom {
+  --tw-exit-translate-y: 100%;
+}
+@utility slide-out-to-bottom-* {
+  --tw-exit-translate-y: --spacing(--value(integer));
+}
+@utility slide-out-to-left {
+  --tw-exit-translate-x: -100%;
+}
+@utility slide-out-to-left-* {
+  --tw-exit-translate-x: calc(--spacing(--value(integer)) * -1);
+}
+@utility slide-out-to-right {
+  --tw-exit-translate-x: 100%;
+}
+@utility slide-out-to-right-* {
+  --tw-exit-translate-x: --spacing(--value(integer));
+}
+
+/* Reduced motion: overlays appear and disappear at once. */
+@media (prefers-reduced-motion: reduce) {
+  .animate-in,
+  .animate-out,
+  [class*="animate-accordion-"],
+  [class*="animate-collapsible-"] {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+/* progress: the indeterminate bar sweeps along the track (margin-inline-start keeps it RTL-safe). */
+@theme inline {
+  --animate-progress-indeterminate: progress-indeterminate 1.5s ease-in-out infinite;
+
+  @keyframes progress-indeterminate {
+    from {
+      margin-inline-start: -40%;
+    }
+    to {
+      margin-inline-start: 100%;
+    }
+  }
+}
+
+/* chart: lines draw in, bars rise and slices fade in; the components add motion-reduce:animate-none. */
+@theme inline {
+  --animate-chart-draw: chart-draw 0.9s ease-out both;
+  --animate-chart-rise: chart-rise 0.6s ease-out both;
+  --animate-chart-fade: chart-fade 0.6s ease-out both;
+
+  @keyframes chart-draw {
+    from {
+      stroke-dashoffset: 1;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  @keyframes chart-rise {
+    from {
+      transform: scaleY(0);
+    }
+    to {
+      transform: scaleY(1);
+    }
+  }
+
+  @keyframes chart-fade {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+}
+
+/*
+ * shimmer and scroll-fade: two utilities the conversation components use (attachment, marker, trace).
+ *
+ * `shimmer` sweeps a highlight across text that is still arriving (a streaming title, "Thinking...").
+ * `scroll-fade-y` and `scroll-fade-x` fade the edges of a scroll container toward the side that has
+ * more to read: each fade grows from nothing as you scroll away from that edge, driven by the
+ * scroll position itself (CSS scroll-driven animation, which follows the reader's hand and is not
+ * motion of its own), with no script. Where the browser has no scroll-driven
+ * animation, or the content does not overflow, nothing is faded. `--scroll-fade-size` sets how far the fade reaches.
+ */
+@property --scroll-fade-start {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+@property --scroll-fade-end {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+@keyframes shimmer {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: -100% 0;
+  }
+}
+
+@keyframes scroll-fade {
+  0% {
+    --scroll-fade-start: 0px;
+    --scroll-fade-end: var(--scroll-fade-size, 1.5rem);
+  }
+  5% {
+    --scroll-fade-start: var(--scroll-fade-size, 1.5rem);
+  }
+  95% {
+    --scroll-fade-end: var(--scroll-fade-size, 1.5rem);
+  }
+  100% {
+    --scroll-fade-start: var(--scroll-fade-size, 1.5rem);
+    --scroll-fade-end: 0px;
+  }
+}
+
+@utility shimmer {
+  color: transparent;
+  background-image: linear-gradient(
+    90deg,
+    var(--muted-foreground) 0%,
+    var(--muted-foreground) 35%,
+    var(--foreground) 50%,
+    var(--muted-foreground) 65%,
+    var(--muted-foreground) 100%
+  );
+  background-size: 200% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  animation: shimmer 2s linear infinite;
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+    color: var(--muted-foreground);
+    background-image: none;
+  }
+  @media (forced-colors: active) {
+    animation: none;
+    color: inherit;
+    background-image: none;
+  }
+}
+
+@utility scroll-fade-y {
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    #000 var(--scroll-fade-start),
+    #000 calc(100% - var(--scroll-fade-end)),
+    transparent
+  );
+  animation: scroll-fade linear both;
+  animation-timeline: scroll(self block);
+}
+
+@utility scroll-fade-x {
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 var(--scroll-fade-start),
+    #000 calc(100% - var(--scroll-fade-end)),
+    transparent
+  );
+  animation: scroll-fade linear both;
+  animation-timeline: scroll(self inline);
+  &:dir(rtl) {
+    mask-image: linear-gradient(
+      to left,
+      transparent,
+      #000 var(--scroll-fade-start),
+      #000 calc(100% - var(--scroll-fade-end)),
+      transparent
+    );
+  }
+}

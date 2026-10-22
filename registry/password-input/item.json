@@ -1,0 +1,5 @@
+{
+  "title": "Password input",
+  "description": "A password field with a show and hide button, a strength meter slot and a Caps Lock hint, built on the PasswordToggleField primitive.",
+  "type": "ui"
+}

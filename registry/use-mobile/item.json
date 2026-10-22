@@ -1,0 +1,5 @@
+{
+  "title": "useIsMobile",
+  "description": "A hook that tells whether the viewport is narrower than 768px. Used by the sidebar.",
+  "type": "hook"
+}

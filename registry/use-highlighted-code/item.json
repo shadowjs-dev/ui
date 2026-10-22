@@ -1,0 +1,5 @@
+{
+  "title": "useHighlightedCode",
+  "description": "Syntax highlighting for code blocks with Shiki: a hook for the browser and an async function for the server, one element per line.",
+  "type": "hook"
+}

@@ -1,0 +1,4 @@
+{
+  "title": "Sidebar",
+  "description": "A composable, collapsible sidebar that becomes a sheet on mobile, with menus, groups, tooltips and a Ctrl/Cmd+B shortcut."
+}

@@ -1,0 +1,4 @@
+{
+  "title": "Direction",
+  "description": "A provider that sets the reading direction (left to right or right to left) for the components below it, and a hook that reads it."
+}

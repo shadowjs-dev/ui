@@ -1,0 +1,4 @@
+{
+  "title": "Trace",
+  "description": "A list of lines for the steps an agent takes: reasoning, tool calls, sources, plans and tasks, each with an icon, a title and a status, and optionally expandable."
+}

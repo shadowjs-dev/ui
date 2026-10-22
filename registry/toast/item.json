@@ -1,0 +1,4 @@
+{
+  "title": "Toast",
+  "description": "Toast stores (useToast in components, createToaster in module code) and the Toaster that shows their notifications, after Sonner."
+}

@@ -1,0 +1,4 @@
+{
+  "title": "Message Scroller",
+  "description": "A chat transcript scroller that keeps the reader's place while a reply streams: anchored turns, following the newest text, history loading and a jump button."
+}

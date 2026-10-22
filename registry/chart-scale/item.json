@@ -1,0 +1,5 @@
+{
+  "title": "Chart scale",
+  "description": "Pure functions for charts: scales, nice ticks, line, area and arc paths, pie angles, stacking and decimation.",
+  "type": "lib"
+}

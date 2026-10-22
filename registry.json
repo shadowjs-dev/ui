@@ -1,0 +1,3274 @@
+{
+  "name": "@shadow-js/ui",
+  "version": "1.0.0",
+  "frameworkDependencies": [
+    "@shadow-js/core",
+    "@shadow-js/primitives",
+    "@shadow-js/web"
+  ],
+  "items": [
+    {
+      "name": "accordion",
+      "type": "ui",
+      "title": "Accordion",
+      "description": "A vertically stacked set of interactive headings that each reveal a section of content.",
+      "files": [
+        {
+          "path": "registry/accordion/accordion.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "icons",
+        "utils"
+      ],
+      "dependencies": {},
+      "exports": [
+        "Accordion",
+        "AccordionContent",
+        "AccordionItem",
+        "AccordionTrigger"
+      ],
+      "primitives": [
+        "Accordion",
+        "AccordionContentProps",
+        "AccordionItemProps",
+        "AccordionProps",
+        "AccordionTriggerProps",
+        "PolymorphicTarget"
+      ],
+      "tailwind": {
+        "tokens": [
+          "muted-foreground",
+          "ring"
+        ],
+        "animations": true
+      }
+    },
+    {
+      "name": "alert",
+      "type": "ui",
+      "title": "Alert",
+      "description": "Displays a callout for user attention.",
+      "files": [
+        {
+          "path": "registry/alert/alert.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "utils"
+      ],
+      "dependencies": {
+        "class-variance-authority": "0.7.1"
+      },
+      "exports": [
+        "Alert",
+        "AlertAction",
+        "AlertDescription",
+        "AlertProps",
+        "AlertTitle",
+        "alertVariants"
+      ],
+      "primitives": [],
+      "tailwind": {
+        "tokens": [
+          "card",
+          "card-foreground",
+          "destructive",
+          "muted-foreground"
+        ],
+        "animations": false
+      }
+    },
+    {
+      "name": "alert-dialog",
+      "type": "ui",
+      "title": "Alert Dialog",
+      "description": "A modal dialog that interrupts the user with important content and expects a response.",
+      "files": [
+        {
+          "path": "registry/alert-dialog/alert-dialog.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "button",
+        "utils"
+      ],
+      "dependencies": {},
+      "exports": [
+        "AlertDialog",
+        "AlertDialogAction",
+        "AlertDialogCancel",
+        "AlertDialogContent",
+        "AlertDialogDescription",
+        "AlertDialogFooter",
+        "AlertDialogHeader",
+        "AlertDialogMedia",
+        "AlertDialogOverlay",
+        "AlertDialogPortal",
+        "AlertDialogTitle",
+        "AlertDialogTrigger"
+      ],
+      "primitives": [
+        "AlertDialog",
+        "AlertDialogActionProps",
+        "AlertDialogCancelProps",
+        "AlertDialogContentProps",
+        "AlertDialogProps",
+        "DialogDescriptionProps",
+        "DialogOverlayProps",
+        "DialogPortalProps",
+        "DialogTitleProps",
+        "DialogTriggerProps",
+        "PolymorphicTarget"
+      ],
+      "tailwind": {
+        "tokens": [
+          "background",
+          "muted",
+          "muted-foreground"
+        ],
+        "animations": true
+      }
+    },
+    {
+      "name": "aspect-ratio",
+      "type": "ui",
+      "title": "Aspect Ratio",
+      "description": "Displays content within a desired ratio.",
+      "files": [
+        {
+          "path": "registry/aspect-ratio/aspect-ratio.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "utils"
+      ],
+      "dependencies": {},
+      "exports": [
+        "AspectRatio",
+        "AspectRatioExtraProps",
+        "AspectRatioProps"
+      ],
+      "primitives": [
+        "mergeElementProps"
+      ],
+      "tailwind": {
+        "tokens": [],
+        "animations": false
+      }
+    },
+    {
+      "name": "attachment",
+      "type": "ui",
+      "title": "Attachment",
+      "description": "A file or an image with its media, name, details, upload state and actions, for composers, threads and upload lists.",
+      "files": [
+        {
+          "path": "registry/attachment/attachment.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "button",
+        "utils"
+      ],
+      "dependencies": {
+        "class-variance-authority": "0.7.1"
+      },
+      "exports": [
+        "Attachment",
+        "AttachmentAction",
+        "AttachmentActionProps",
+        "AttachmentActions",
+        "AttachmentContent",
+        "AttachmentDescription",
+        "AttachmentGroup",
+        "AttachmentMedia",
+        "AttachmentMediaProps",
+        "AttachmentProps",
+        "AttachmentState",
+        "AttachmentTitle",
+        "AttachmentTrigger",
+        "AttachmentTriggerProps",
+        "attachmentVariants"
+      ],
+      "primitives": [
+        "Polymorphic",
+        "PolymorphicProps",
+        "PolymorphicTarget"
+      ],
+      "tailwind": {
+        "tokens": [
+          "accent",
+          "card",
+          "card-foreground",
+          "destructive",
+          "muted",
+          "muted-foreground",
+          "ring"
+        ],
+        "animations": true
+      }
+    },
+    {
+      "name": "avatar",
+      "type": "ui",
+      "title": "Avatar",
+      "description": "User images with fallbacks, size variants, status badges and overlapping groups.",
+      "files": [
+        {
+          "path": "registry/avatar/avatar.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "utils"
+      ],
+      "dependencies": {},
+      "exports": [
+        "Avatar",
+        "AvatarBadge",
+        "AvatarBadgeProps",
+        "AvatarFallback",
+        "AvatarFallbackExtraProps",
+        "AvatarFallbackProps",
+        "AvatarGroup",
+        "AvatarGroupCount",
+        "AvatarGroupCountProps",
+        "AvatarGroupProps",
+        "AvatarImage",
+        "AvatarImageExtraProps",
+        "AvatarImageProps",
+        "AvatarLoadingStatus",
+        "AvatarProps"
+      ],
+      "primitives": [
+        "mergeElementProps"
+      ],
+      "tailwind": {
+        "tokens": [
+          "background",
+          "muted",
+          "muted-foreground",
+          "primary",
+          "primary-foreground"
+        ],
+        "animations": false
+      }
+    },
+    {
+      "name": "badge",
+      "type": "ui",
+      "title": "Badge",
+      "description": "Displays a badge or a component that looks like a badge.",
+      "files": [
+        {
+          "path": "registry/badge/badge.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "utils"
+      ],
+      "dependencies": {
+        "class-variance-authority": "0.7.1"
+      },
+      "exports": [
+        "Badge",
+        "BadgeProps",
+        "badgeVariants"
+      ],
+      "primitives": [
+        "Polymorphic",
+        "PolymorphicProps",
+        "PolymorphicTarget"
+      ],
+      "tailwind": {
+        "tokens": [
+          "accent",
+          "accent-foreground",
+          "destructive",
+          "foreground",
+          "primary",
+          "primary-foreground",
+          "ring",
+          "secondary",
+          "secondary-foreground"
+        ],
+        "animations": false
+      }
+    },
+    {
+      "name": "breadcrumb",
+      "type": "ui",
+      "title": "Breadcrumb",
+      "description": "Displays the path to the current resource using a hierarchy of links.",
+      "files": [
+        {
+          "path": "registry/breadcrumb/breadcrumb.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "icons",
+        "ui-strings",
+        "utils"
+      ],
+      "dependencies": {},
+      "exports": [
+        "Breadcrumb",
+        "BreadcrumbEllipsis",
+        "BreadcrumbItem",
+        "BreadcrumbLink",
+        "BreadcrumbLinkProps",
+        "BreadcrumbList",
+        "BreadcrumbPage",
+        "BreadcrumbSeparator"
+      ],
+      "primitives": [
+        "Polymorphic",
+        "PolymorphicProps",
+        "PolymorphicTarget"
+      ],
+      "tailwind": {
+        "tokens": [
+          "foreground",
+          "muted-foreground"
+        ],
+        "animations": false
+      }
+    },
+    {
+      "name": "bubble",
+      "type": "ui",
+      "title": "Bubble",
+      "description": "A framed message bubble for chat text, short structured output, quoted replies, suggestions and reactions.",
+      "files": [
+        {
+          "path": "registry/bubble/bubble.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "utils"
+      ],
+      "dependencies": {
+        "class-variance-authority": "0.7.1"
+      },
+      "exports": [
+        "Bubble",
+        "BubbleContent",
+        "BubbleContentProps",
+        "BubbleGroup",
+        "BubbleProps",
+        "BubbleReactions",
+        "BubbleReactionsProps",
+        "bubbleVariants"
+      ],
+      "primitives": [
+        "Polymorphic",
+        "PolymorphicProps",
+        "PolymorphicTarget"
+      ],
+      "tailwind": {
+        "tokens": [
+          "accent",
+          "background",
+          "destructive",
+          "foreground",
+          "muted",
+          "primary",
+          "primary-foreground",
+          "ring",
+          "secondary",
+          "secondary-foreground"
+        ],
+        "animations": false
+      }
+    },
+    {
+      "name": "button",
+      "type": "ui",
+      "title": "Button",
+      "description": "Displays a button or a component that looks like a button.",
+      "files": [
+        {
+          "path": "registry/button/button.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "utils"
+      ],
+      "dependencies": {
+        "class-variance-authority": "0.7.1"
+      },
+      "exports": [
+        "Button",
+        "ButtonProps",
+        "buttonVariants"
+      ],
+      "primitives": [
+        "Polymorphic",
+        "PolymorphicProps",
+        "PolymorphicTarget"
+      ],
+      "tailwind": {
+        "tokens": [
+          "accent",
+          "accent-foreground",
+          "background",
+          "destructive",
+          "foreground",
+          "input",
+          "primary",
+          "primary-foreground",
+          "ring",
+          "secondary",
+          "secondary-foreground"
+        ],
+        "animations": false
+      }
+    },
+    {
+      "name": "button-group",
+      "type": "ui",
+      "title": "Button Group",
+      "description": "Buttons and inputs that sit together as one control, with the inner corners square and the borders joined.",
+      "files": [
+        {
+          "path": "registry/button-group/button-group.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "utils"
+      ],
+      "dependencies": {
+        "class-variance-authority": "0.7.1"
+      },
+      "exports": [
+        "ButtonGroup",
+        "ButtonGroupProps",
+        "ButtonGroupSeparator",
+        "ButtonGroupText",
+        "ButtonGroupTextProps"
+      ],
+      "primitives": [
+        "Polymorphic",
+        "PolymorphicProps",
+        "PolymorphicTarget"
+      ],
+      "tailwind": {
+        "tokens": [
+          "input",
+          "muted"
+        ],
+        "animations": false
+      }
+    },
+    {
+      "name": "calendar",
+      "type": "ui",
+      "title": "Calendar",
+      "description": "A month grid to pick one day, several days or a range, with a keyboard grid, locale names and month and year navigation.",
+      "files": [
+        {
+          "path": "registry/calendar/calendar.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "button",
+        "icons",
+        "ui-strings",
+        "utils"
+      ],
+      "dependencies": {},
+      "exports": [
+        "Calendar",
+        "CalendarDayCell",
+        "CalendarLabels",
+        "CalendarProps",
+        "isCalendarDay"
+      ],
+      "primitives": [
+        "Calendar",
+        "CalendarDate",
+        "CalendarProps",
+        "CalendarValue",
+        "useCalendar"
+      ],
+      "tailwind": {
+        "tokens": [
+          "accent",
+          "accent-foreground",
+          "background",
+          "foreground",
+          "input",
+          "muted-foreground",
+          "primary",
+          "primary-foreground",
+          "ring"
+        ],
+        "animations": false
+      }
+    },
+    {
+      "name": "card",
+      "type": "ui",
+      "title": "Card",
+      "description": "Displays a card with header, content, and footer.",
+      "files": [
+        {
+          "path": "registry/card/card.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "utils"
+      ],
+      "dependencies": {},
+      "exports": [
+        "Card",
+        "CardAction",
+        "CardContent",
+        "CardDescription",
+        "CardFooter",
+        "CardHeader",
+        "CardProps",
+        "CardTitle"
+      ],
+      "primitives": [],
+      "tailwind": {
+        "tokens": [
+          "card",
+          "card-foreground",
+          "muted-foreground"
+        ],
+        "animations": false
+      }
+    },
+    {
+      "name": "carousel",
+      "type": "ui",
+      "title": "Carousel",
+      "description": "Slides with buttons, arrow keys, indicators, drag and opt-in autoplay, on native scroll-snap; no carousel library.",
+      "files": [
+        {
+          "path": "registry/carousel/carousel.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "button",
+        "icons",
+        "ui-strings",
+        "utils"
+      ],
+      "dependencies": {},
+      "exports": [
+        "Carousel",
+        "CarouselApi",
+        "CarouselContent",
+        "CarouselEvent",
+        "CarouselIndicators",
+        "CarouselItem",
+        "CarouselLabels",
+        "CarouselNext",
+        "CarouselOptions",
+        "CarouselOrientation",
+        "CarouselPrevious",
+        "CarouselProps"
+      ],
+      "primitives": [
+        "Direction",
+        "createPartContext",
+        "useDirectionAround",
+        "useRefSignal"
+      ],
+      "tailwind": {
+        "tokens": [
+          "muted-foreground",
+          "primary",
+          "ring"
+        ],
+        "animations": false
+      }
+    },
+    {
+      "name": "chart",
+      "type": "ui",
+      "title": "Chart",
+      "description": "Themeable SVG line, area, bar, pie, donut and radial charts with axes, a keyboard-navigable tooltip and legend, and a table for screen readers.",
+      "files": [
+        {
+          "path": "registry/chart/chart.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "chart-scale",
+        "ui-strings",
+        "utils"
+      ],
+      "dependencies": {},
+      "exports": [
+        "ChartActivePoint",
+        "ChartArea",
+        "ChartBar",
+        "ChartConfig",
+        "ChartContainer",
+        "ChartContainerProps",
+        "ChartDatum",
+        "ChartIcon",
+        "ChartLegend",
+        "ChartLegendContent",
+        "ChartLegendContentProps",
+        "ChartLegendProps",
+        "ChartLine",
+        "ChartPie",
+        "ChartPolarProps",
+        "ChartRadial",
+        "ChartSeriesProps",
+        "ChartTooltip",
+        "ChartTooltipContent",
+        "ChartTooltipContentProps",
+        "ChartTooltipProps",
+        "ChartTooltipRow",
+        "areaPath",
+        "linePath",
+        "linearScale",
+        "nearestIndex",
+        "niceMax",
+        "polarPoint",
+        "slicePath"
+      ],
+      "primitives": [
+        "Direction",
+        "createPartContext",
+        "getRovingTarget",
+        "useDirection",
+        "useDirectionAround",
+        "useRefSignal"
+      ],
+      "tailwind": {
+        "tokens": [
+          "background",
+          "border",
+          "foreground",
+          "muted",
+          "muted-foreground",
+          "ring"
+        ],
+        "animations": false
+      }
+    },
+    {
+      "name": "chart-scale",
+      "type": "lib",
+      "title": "Chart scale",
+      "description": "Pure functions for charts: scales, nice ticks, line, area and arc paths, pie angles, stacking and decimation.",
+      "files": [
+        {
+          "path": "registry/chart-scale/chart-scale.ts",
+          "type": "lib"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": {},
+      "exports": [
+        "ChartCurve",
+        "ChartPoint",
+        "PieAngle",
+        "PieAngleOptions",
+        "arcPath",
+        "areaPath",
+        "bandPositions",
+        "cssKey",
+        "decimateIndices",
+        "invertLinear",
+        "linePath",
+        "linearScale",
+        "nearestIndex",
+        "niceDomain",
+        "niceMax",
+        "niceTicks",
+        "pieAngles",
+        "pointPositions",
+        "polarPoint",
+        "slicePath",
+        "stackColumns"
+      ],
+      "primitives": [],
+      "tailwind": {
+        "tokens": [],
+        "animations": false
+      }
+    },
+    {
+      "name": "checkbox",
+      "type": "ui",
+      "title": "Checkbox",
+      "description": "A control that allows the user to toggle between checked, unchecked and indeterminate.",
+      "files": [
+        {
+          "path": "registry/checkbox/checkbox.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "icons",
+        "utils"
+      ],
+      "dependencies": {},
+      "exports": [
+        "Checkbox",
+        "CheckboxProps"
+      ],
+      "primitives": [
+        "Checkbox",
+        "CheckboxProps",
+        "PolymorphicTarget"
+      ],
+      "tailwind": {
+        "tokens": [
+          "destructive",
+          "input",
+          "primary",
+          "primary-foreground",
+          "ring"
+        ],
+        "animations": false
+      }
+    },
+    {
+      "name": "code-block",
+      "type": "ui",
+      "title": "Code Block",
+      "description": "Code, terminal output, logs and diffs, with an optional header, line numbers, wrapping and a copy button.",
+      "files": [
+        {
+          "path": "registry/code-block/code-block.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "button",
+        "icons",
+        "ui-strings",
+        "utils"
+      ],
+      "dependencies": {
+        "class-variance-authority": "0.7.1"
+      },
+      "exports": [
+        "CodeBlock",
+        "CodeBlockActions",
+        "CodeBlockContent",
+        "CodeBlockContentProps",
+        "CodeBlockCopyButton",
+        "CodeBlockCopyButtonProps",
+        "CodeBlockFooter",
+        "CodeBlockHeader",
+        "CodeBlockLine",
+        "CodeBlockLineProps",
+        "CodeBlockProps",
+        "CodeBlockTitle",
+        "codeBlockVariants"
+      ],
+      "primitives": [],
+      "tailwind": {
+        "tokens": [
+          "accent",
+          "destructive",
+          "foreground",
+          "muted",
+          "muted-foreground",
+          "ring"
+        ],
+        "animations": false
+      }
+    },
+    {
+      "name": "collapsible",
+      "type": "ui",
+      "title": "Collapsible",
+      "description": "An interactive component which expands/collapses a panel.",
+      "files": [
+        {
+          "path": "registry/collapsible/collapsible.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "utils"
+      ],
+      "dependencies": {},
+      "exports": [
+        "Collapsible",
+        "CollapsibleContent",
+        "CollapsibleTrigger"
+      ],
+      "primitives": [
+        "Collapsible",
+        "CollapsibleContentProps",
+        "CollapsibleProps",
+        "CollapsibleTriggerProps",
+        "PolymorphicTarget"
+      ],
+      "tailwind": {
+        "tokens": [],
+        "animations": true
+      }
+    },
+    {
+      "name": "combobox",
+      "type": "ui",
+      "title": "Combobox",
+      "description": "An input with a filtered list of options, with single or multiple (chips) selection.",
+      "files": [
+        {
+          "path": "registry/combobox/combobox.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "icons",
+        "ui-strings",
+        "utils"
+      ],
+      "dependencies": {},
+      "exports": [
+        "Combobox",
+        "ComboboxChip",
+        "ComboboxChipExtraProps",
+        "ComboboxChipProps",
+        "ComboboxChipRemove",
+        "ComboboxChips",
+        "ComboboxChipsInput",
+        "ComboboxClear",
+        "ComboboxCollection",
+        "ComboboxCollectionProps",
+        "ComboboxContent",
+        "ComboboxContentProps",
+        "ComboboxEmpty",
+        "ComboboxGroup",
+        "ComboboxInput",
+        "ComboboxInputExtraProps",
+        "ComboboxInputProps",
+        "ComboboxItem",
+        "ComboboxItemProps",
+        "ComboboxItemsProps",
+        "ComboboxLabel",
+        "ComboboxList",
+        "ComboboxListProps",
+        "ComboboxLoading",
+        "ComboboxSeparator",
+        "ComboboxTrigger",
+        "ComboboxValue"
+      ],
+      "primitives": [
+        "Combobox",
+        "ComboboxChipProps",
+        "ComboboxChipRemoveProps",
+        "ComboboxChipsProps",
+        "ComboboxClearProps",
+        "ComboboxContentProps",
+        "ComboboxEmptyProps",
+        "ComboboxGroupProps",
+        "ComboboxInputProps",
+        "ComboboxItemProps",
+        "ComboboxLabelProps",
+        "ComboboxLoadingProps",
+        "ComboboxProps",
+        "ComboboxSeparatorProps",
+        "ComboboxTriggerProps",
+        "PolymorphicTarget"
+      ],
+      "tailwind": {
+        "tokens": [
+          "accent",
+          "accent-foreground",
+          "border",
+          "destructive",
+          "foreground",
+          "input",
+          "muted",
+          "muted-foreground",
+          "popover",
+          "popover-foreground",
+          "primary",
+          "primary-foreground",
+          "ring"
+        ],
+        "animations": true
+      }
+    },
+    {
+      "name": "command",
+      "type": "ui",
+      "title": "Command",
+      "description": "A command palette: a search field and a filtered, keyboard-navigable list of commands, inline or in a dialog.",
+      "files": [
+        {
+          "path": "registry/command/command.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "dialog",
+        "icons",
+        "ui-strings",
+        "utils"
+      ],
+      "dependencies": {},
+      "exports": [
+        "Command",
+        "CommandDialog",
+        "CommandDialogProps",
+        "CommandEmpty",
+        "CommandFilter",
+        "CommandGroup",
+        "CommandGroupProps",
+        "CommandInput",
+        "CommandInputProps",
+        "CommandItem",
+        "CommandItemProps",
+        "CommandList",
+        "CommandListProps",
+        "CommandProps",
+        "CommandSeparator",
+        "CommandShortcut"
+      ],
+      "primitives": [
+        "Combobox",
+        "ComboboxContentProps",
+        "ComboboxEmptyProps",
+        "ComboboxFilterItem",
+        "ComboboxGroupProps",
+        "ComboboxInputProps",
+        "ComboboxItemProps",
+        "ComboboxSeparatorProps",
+        "DialogProps",
+        "createPartContext",
+        "normalizeSearchText",
+        "useControllableState"
+      ],
+      "tailwind": {
+        "tokens": [
+          "accent",
+          "accent-foreground",
+          "border",
+          "foreground",
+          "muted-foreground",
+          "popover",
+          "popover-foreground",
+          "ring"
+        ],
+        "animations": false
+      }
+    },
+    {
+      "name": "context-menu",
+      "type": "ui",
+      "title": "Context Menu",
+      "description": "Displays a menu to the user, such as a set of actions or functions, triggered by a right click or long press.",
+      "files": [
+        {
+          "path": "registry/context-menu/context-menu.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "icons",
+        "utils"
+      ],
+      "dependencies": {},
+      "exports": [
+        "ContextMenu",
+        "ContextMenuCheckboxItem",
+        "ContextMenuContent",
+        "ContextMenuGroup",
+        "ContextMenuItem",
+        "ContextMenuItemExtraProps",
+        "ContextMenuItemProps",
+        "ContextMenuLabel",
+        "ContextMenuLabelProps",
+        "ContextMenuPortal",
+        "ContextMenuRadioGroup",
+        "ContextMenuRadioItem",
+        "ContextMenuSeparator",
+        "ContextMenuShortcut",
+        "ContextMenuSub",
+        "ContextMenuSubContent",
+        "ContextMenuSubTrigger",
+        "ContextMenuTrigger"
+      ],
+      "primitives": [
+        "ContextMenu",
+        "ContextMenuContentProps",
+        "ContextMenuProps",
+        "ContextMenuTriggerProps",
+        "MenuCheckboxItemProps",
+        "MenuGroupProps",
+        "MenuItemOwnProps",
+        "MenuLabelProps",
+        "MenuPortalProps",
+        "MenuRadioGroupProps",
+        "MenuRadioItemProps",
+        "MenuSeparatorProps",
+        "MenuSubContentProps",
+        "MenuSubProps",
+        "MenuSubTriggerProps",
+        "PolymorphicProps",
+        "PolymorphicTarget"
+      ],
+      "tailwind": {
+        "tokens": [
+          "accent",
+          "accent-foreground",
+          "border",
+          "destructive",
+          "foreground",
+          "muted-foreground",
+          "popover",
+          "popover-foreground"
+        ],
+        "animations": true
+      }
+    },
+    {
+      "name": "data-table",
+      "type": "ui",
+      "title": "Data table",
+      "description": "A data table over @shadow-js/table: sortable headers, pagination, column visibility and selection state.",
+      "files": [
+        {
+          "path": "registry/data-table/data-table.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "button",
+        "dropdown-menu",
+        "table",
+        "ui-strings",
+        "utils"
+      ],
+      "dependencies": {
+        "@shadow-js/table": "1.0.0"
+      },
+      "exports": [
+        "DataTable",
+        "DataTableColumnHeader",
+        "DataTableColumnHeaderProps",
+        "DataTablePagination",
+        "DataTablePaginationLabels",
+        "DataTablePaginationProps",
+        "DataTableProps",
+        "DataTableViewOptions",
+        "DataTableViewOptionsProps"
+      ],
+      "primitives": [
+        "Direction"
+      ],
+      "tailwind": {
+        "tokens": [
+          "muted-foreground"
+        ],
+        "animations": false
+      }
+    },
+    {
+      "name": "date-picker",
+      "type": "ui",
+      "title": "Date Picker",
+      "description": "A date text field with a calendar in a popover; typed dates follow the locale and are checked against the limits.",
+      "files": [
+        {
+          "path": "registry/date-picker/date-picker.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "button",
+        "calendar",
+        "input",
+        "popover",
+        "ui-strings",
+        "utils"
+      ],
+      "dependencies": {},
+      "exports": [
+        "DatePicker",
+        "DatePickerProps"
+      ],
+      "primitives": [
+        "CalendarDate",
+        "CalendarValue",
+        "compareDates",
+        "formatDate",
+        "parseDateInput",
+        "useControllableState"
+      ],
+      "tailwind": {
+        "tokens": [],
+        "animations": false
+      }
+    },
+    {
+      "name": "dialog",
+      "type": "ui",
+      "title": "Dialog",
+      "description": "A window overlaid on the primary window, rendering the content underneath inert.",
+      "files": [
+        {
+          "path": "registry/dialog/dialog.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "icons",
+        "ui-strings",
+        "utils"
+      ],
+      "dependencies": {},
+      "exports": [
+        "Dialog",
+        "DialogClose",
+        "DialogContent",
+        "DialogContentExtraProps",
+        "DialogDescription",
+        "DialogFooter",
+        "DialogHeader",
+        "DialogOverlay",
+        "DialogPortal",
+        "DialogTitle",
+        "DialogTrigger"
+      ],
+      "primitives": [
+        "Dialog",
+        "DialogCloseProps",
+        "DialogContentProps",
+        "DialogDescriptionProps",
+        "DialogOverlayProps",
+        "DialogPortalProps",
+        "DialogProps",
+        "DialogTitleProps",
+        "DialogTriggerProps",
+        "PolymorphicTarget"
+      ],
+      "tailwind": {
+        "tokens": [
+          "accent",
+          "background",
+          "muted-foreground",
+          "ring"
+        ],
+        "animations": true
+      }
+    },
+    {
+      "name": "direction",
+      "type": "ui",
+      "title": "Direction",
+      "description": "A provider that sets the reading direction (left to right or right to left) for the components below it, and a hook that reads it.",
+      "files": [
+        {
+          "path": "registry/direction/direction.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": {},
+      "exports": [
+        "DirectionProvider",
+        "DirectionProviderProps",
+        "useDirection"
+      ],
+      "primitives": [
+        "Direction",
+        "DirectionProvider",
+        "useDirection"
+      ],
+      "tailwind": {
+        "tokens": [],
+        "animations": false
+      }
+    },
+    {
+      "name": "drawer",
+      "type": "ui",
+      "title": "Drawer",
+      "description": "A bottom sheet for mobile: drag the grip to snap it between heights or dismiss it, with the keyboard as well; it is a dialog.",
+      "files": [
+        {
+          "path": "registry/drawer/drawer.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "ui-strings",
+        "utils"
+      ],
+      "dependencies": {},
+      "exports": [
+        "Drawer",
+        "DrawerClose",
+        "DrawerContent",
+        "DrawerDescription",
+        "DrawerDirection",
+        "DrawerFooter",
+        "DrawerHandle",
+        "DrawerHeader",
+        "DrawerOverlay",
+        "DrawerPortal",
+        "DrawerProps",
+        "DrawerSnapPoints",
+        "DrawerTitle",
+        "DrawerTrigger"
+      ],
+      "primitives": [
+        "Dialog",
+        "DialogCloseProps",
+        "DialogContentProps",
+        "DialogDescriptionProps",
+        "DialogOverlayProps",
+        "DialogPortalProps",
+        "DialogTitleProps",
+        "DialogTriggerProps",
+        "PolymorphicTarget",
+        "createPartContext",
+        "useControllableState"
+      ],
+      "tailwind": {
+        "tokens": [
+          "background",
+          "muted",
+          "muted-foreground",
+          "ring"
+        ],
+        "animations": true
+      }
+    },
+    {
+      "name": "dropdown-menu",
+      "type": "ui",
+      "title": "Dropdown Menu",
+      "description": "Displays a menu to the user, such as a set of actions or functions, triggered by a button.",
+      "files": [
+        {
+          "path": "registry/dropdown-menu/dropdown-menu.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "icons",
+        "utils"
+      ],
+      "dependencies": {},
+      "exports": [
+        "DropdownMenu",
+        "DropdownMenuCheckboxItem",
+        "DropdownMenuContent",
+        "DropdownMenuGroup",
+        "DropdownMenuItem",
+        "DropdownMenuItemExtraProps",
+        "DropdownMenuItemProps",
+        "DropdownMenuLabel",
+        "DropdownMenuLabelProps",
+        "DropdownMenuPortal",
+        "DropdownMenuRadioGroup",
+        "DropdownMenuRadioItem",
+        "DropdownMenuSeparator",
+        "DropdownMenuShortcut",
+        "DropdownMenuSub",
+        "DropdownMenuSubContent",
+        "DropdownMenuSubTrigger",
+        "DropdownMenuTrigger"
+      ],
+      "primitives": [
+        "DropdownMenu",
+        "DropdownMenuProps",
+        "DropdownMenuTriggerProps",
+        "MenuCheckboxItemProps",
+        "MenuContentProps",
+        "MenuGroupProps",
+        "MenuItemOwnProps",
+        "MenuLabelProps",
+        "MenuPortalProps",
+        "MenuRadioGroupProps",
+        "MenuRadioItemProps",
+        "MenuSeparatorProps",
+        "MenuSubContentProps",
+        "MenuSubProps",
+        "MenuSubTriggerProps",
+        "PolymorphicProps",
+        "PolymorphicTarget"
+      ],
+      "tailwind": {
+        "tokens": [
+          "accent",
+          "accent-foreground",
+          "border",
+          "destructive",
+          "foreground",
+          "muted-foreground",
+          "popover",
+          "popover-foreground"
+        ],
+        "animations": true
+      }
+    },
+    {
+      "name": "empty",
+      "type": "ui",
+      "title": "Empty",
+      "description": "An empty-state block: media, title, description and the next action.",
+      "files": [
+        {
+          "path": "registry/empty/empty.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "utils"
+      ],
+      "dependencies": {
+        "class-variance-authority": "0.7.1"
+      },
+      "exports": [
+        "Empty",
+        "EmptyContent",
+        "EmptyDescription",
+        "EmptyHeader",
+        "EmptyMedia",
+        "EmptyMediaProps",
+        "EmptyTitle"
+      ],
+      "primitives": [],
+      "tailwind": {
+        "tokens": [
+          "foreground",
+          "muted",
+          "muted-foreground",
+          "primary"
+        ],
+        "animations": false
+      }
+    },
+    {
+      "name": "field",
+      "type": "ui",
+      "title": "Field",
+      "description": "Form field layout: a label, a control, a description and an error, wired to one control with the ids a form needs.",
+      "files": [
+        {
+          "path": "registry/field/field.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "utils"
+      ],
+      "dependencies": {
+        "class-variance-authority": "0.7.1"
+      },
+      "exports": [
+        "Field",
+        "FieldContent",
+        "FieldDescription",
+        "FieldError",
+        "FieldErrorProps",
+        "FieldGroup",
+        "FieldLabel",
+        "FieldLegend",
+        "FieldProps",
+        "FieldSeparator",
+        "FieldSet",
+        "FieldTitle",
+        "useField"
+      ],
+      "primitives": [
+        "Label",
+        "createPartContext",
+        "partId",
+        "useBaseId",
+        "usePartRegistration"
+      ],
+      "tailwind": {
+        "tokens": [
+          "background",
+          "destructive",
+          "muted-foreground"
+        ],
+        "animations": false
+      }
+    },
+    {
+      "name": "form",
+      "type": "ui",
+      "title": "Form",
+      "description": "Accessible form wiring for any form library: a Form root, field ids, labels, descriptions, error messages and an error summary.",
+      "files": [
+        {
+          "path": "registry/form/form.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "label",
+        "ui-strings",
+        "utils"
+      ],
+      "dependencies": {},
+      "exports": [
+        "Form",
+        "FormApiLike",
+        "FormControl",
+        "FormControlProps",
+        "FormControlRenderProps",
+        "FormDescription",
+        "FormErrorSummary",
+        "FormErrorSummaryProps",
+        "FormField",
+        "FormFieldError",
+        "FormFieldInfo",
+        "FormFieldProps",
+        "FormFieldSource",
+        "FormFieldState",
+        "FormIssueLike",
+        "FormItem",
+        "FormLabel",
+        "FormMessage",
+        "FormProps",
+        "useFormField"
+      ],
+      "primitives": [
+        "PartContext",
+        "PartRegistration",
+        "Polymorphic",
+        "PolymorphicProps",
+        "PolymorphicTarget",
+        "createPartContext",
+        "mergeElementProps",
+        "partId",
+        "useBaseId",
+        "usePartRegistration",
+        "useRefSignal"
+      ],
+      "tailwind": {
+        "tokens": [
+          "destructive",
+          "muted-foreground"
+        ],
+        "animations": false
+      }
+    },
+    {
+      "name": "hover-card",
+      "type": "ui",
+      "title": "Hover Card",
+      "description": "For sighted users to preview content available behind a link.",
+      "files": [
+        {
+          "path": "registry/hover-card/hover-card.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "utils"
+      ],
+      "dependencies": {},
+      "exports": [
+        "HoverCard",
+        "HoverCardContent",
+        "HoverCardProps",
+        "HoverCardTrigger"
+      ],
+      "primitives": [
+        "HoverCard",
+        "HoverCardContentProps",
+        "HoverCardProps",
+        "HoverCardTriggerProps",
+        "PolymorphicTarget"
+      ],
+      "tailwind": {
+        "tokens": [
+          "popover",
+          "popover-foreground"
+        ],
+        "animations": true
+      }
+    },
+    {
+      "name": "icons",
+      "type": "ui",
+      "title": "Icons",
+      "description": "The inline SVG icons the components use (check, chevrons, close, search...). Replace with your icon library if you prefer.",
+      "files": [
+        {
+          "path": "registry/icons/icons.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "utils"
+      ],
+      "dependencies": {},
+      "exports": [
+        "AlignCenterIcon",
+        "AlignLeftIcon",
+        "AlignRightIcon",
+        "ArrowLeftIcon",
+        "ArrowRightIcon",
+        "ArrowUpIcon",
+        "BellIcon",
+        "BoldIcon",
+        "BookmarkIcon",
+        "BotIcon",
+        "CalendarIcon",
+        "CheckIcon",
+        "ChevronDownIcon",
+        "ChevronLeftIcon",
+        "ChevronRightIcon",
+        "ChevronUpIcon",
+        "ChevronsUpDownIcon",
+        "CircleCheckIcon",
+        "CircleIcon",
+        "CircleXIcon",
+        "ClockIcon",
+        "CodeIcon",
+        "CommandIcon",
+        "CopyIcon",
+        "CreditCardIcon",
+        "DownloadIcon",
+        "EllipsisIcon",
+        "ExternalLinkIcon",
+        "EyeIcon",
+        "FileIcon",
+        "FileTextIcon",
+        "FolderIcon",
+        "GlobeIcon",
+        "GripVerticalIcon",
+        "HeartIcon",
+        "HomeIcon",
+        "IconProps",
+        "ImageIcon",
+        "InfoIcon",
+        "ItalicIcon",
+        "LinkIcon",
+        "LoaderIcon",
+        "LockIcon",
+        "LogOutIcon",
+        "MailIcon",
+        "MenuIcon",
+        "MinusIcon",
+        "MoonIcon",
+        "PanelLeftIcon",
+        "PaperclipIcon",
+        "PencilIcon",
+        "PlusIcon",
+        "RefreshIcon",
+        "RouteIcon",
+        "SearchIcon",
+        "SettingsIcon",
+        "SmileIcon",
+        "SparklesIcon",
+        "SquareIcon",
+        "StarIcon",
+        "SunIcon",
+        "TerminalIcon",
+        "ThumbsDownIcon",
+        "ThumbsUpIcon",
+        "TrashIcon",
+        "TriangleAlertIcon",
+        "UnderlineIcon",
+        "UploadIcon",
+        "UserIcon",
+        "WrenchIcon",
+        "XIcon"
+      ],
+      "primitives": [],
+      "tailwind": {
+        "tokens": [
+          "destructive",
+          "muted-foreground",
+          "primary"
+        ],
+        "animations": false
+      }
+    },
+    {
+      "name": "input",
+      "type": "ui",
+      "title": "Input",
+      "description": "A form input field.",
+      "files": [
+        {
+          "path": "registry/input/input.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "utils"
+      ],
+      "dependencies": {},
+      "exports": [
+        "Input"
+      ],
+      "primitives": [],
+      "tailwind": {
+        "tokens": [
+          "destructive",
+          "foreground",
+          "input",
+          "muted-foreground",
+          "primary",
+          "primary-foreground",
+          "ring"
+        ],
+        "animations": false
+      }
+    },
+    {
+      "name": "input-group",
+      "type": "ui",
+      "title": "Input Group",
+      "description": "A text control with addons (text, icons, buttons) on its sides, sharing one border and focus ring.",
+      "files": [
+        {
+          "path": "registry/input-group/input-group.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "utils"
+      ],
+      "dependencies": {
+        "class-variance-authority": "0.7.1"
+      },
+      "exports": [
+        "InputGroup",
+        "InputGroupAddon",
+        "InputGroupAddonProps",
+        "InputGroupButton",
+        "InputGroupButtonProps",
+        "InputGroupInput",
+        "InputGroupText",
+        "InputGroupTextarea"
+      ],
+      "primitives": [],
+      "tailwind": {
+        "tokens": [
+          "accent",
+          "accent-foreground",
+          "background",
+          "destructive",
+          "foreground",
+          "input",
+          "muted-foreground",
+          "primary",
+          "primary-foreground",
+          "ring",
+          "secondary",
+          "secondary-foreground"
+        ],
+        "animations": false
+      }
+    },
+    {
+      "name": "input-otp",
+      "type": "ui",
+      "title": "Input OTP",
+      "description": "A one-time code with custom character patterns, digit normalization, paste, autofill and RTL keyboard navigation.",
+      "files": [
+        {
+          "path": "registry/input-otp/input-otp.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "ui-strings",
+        "utils"
+      ],
+      "dependencies": {},
+      "exports": [
+        "InputOTP",
+        "InputOTPGroup",
+        "InputOTPProps",
+        "InputOTPSeparator",
+        "InputOTPSlot",
+        "REGEXP_ONLY_CHARS",
+        "REGEXP_ONLY_DIGITS",
+        "REGEXP_ONLY_DIGITS_AND_CHARS"
+      ],
+      "primitives": [
+        "Direction",
+        "OneTimePasswordField",
+        "OneTimePasswordType",
+        "createOneTimePasswordPattern",
+        "createPartContext"
+      ],
+      "tailwind": {
+        "tokens": [
+          "destructive",
+          "input",
+          "muted-foreground",
+          "ring"
+        ],
+        "animations": false
+      }
+    },
+    {
+      "name": "item",
+      "type": "ui",
+      "title": "Item",
+      "description": "A row of media, content and actions, in a group, that can be a link.",
+      "files": [
+        {
+          "path": "registry/item/item.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "utils"
+      ],
+      "dependencies": {
+        "class-variance-authority": "0.7.1"
+      },
+      "exports": [
+        "Item",
+        "ItemActions",
+        "ItemContent",
+        "ItemDescription",
+        "ItemFooter",
+        "ItemGroup",
+        "ItemHeader",
+        "ItemMedia",
+        "ItemMediaProps",
+        "ItemOwnProps",
+        "ItemProps",
+        "ItemSeparator",
+        "ItemTitle"
+      ],
+      "primitives": [
+        "Polymorphic",
+        "PolymorphicProps",
+        "PolymorphicTarget",
+        "createPartContext",
+        "mergeElementProps"
+      ],
+      "tailwind": {
+        "tokens": [
+          "accent",
+          "border",
+          "muted",
+          "muted-foreground",
+          "ring"
+        ],
+        "animations": false
+      }
+    },
+    {
+      "name": "kbd",
+      "type": "ui",
+      "title": "Kbd",
+      "description": "Used to display textual user input from keyboard.",
+      "files": [
+        {
+          "path": "registry/kbd/kbd.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "utils"
+      ],
+      "dependencies": {},
+      "exports": [
+        "Kbd",
+        "KbdGroup"
+      ],
+      "primitives": [],
+      "tailwind": {
+        "tokens": [
+          "background",
+          "foreground",
+          "muted"
+        ],
+        "animations": false
+      }
+    },
+    {
+      "name": "label",
+      "type": "ui",
+      "title": "Label",
+      "description": "Renders an accessible label associated with controls.",
+      "files": [
+        {
+          "path": "registry/label/label.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "utils"
+      ],
+      "dependencies": {},
+      "exports": [
+        "Label",
+        "LabelProps"
+      ],
+      "primitives": [
+        "Label",
+        "LabelProps",
+        "PolymorphicTarget"
+      ],
+      "tailwind": {
+        "tokens": [],
+        "animations": false
+      }
+    },
+    {
+      "name": "marker",
+      "type": "ui",
+      "title": "Marker",
+      "description": "An inline note in a conversation: a status update, a system message, a bordered row or a labeled separator.",
+      "files": [
+        {
+          "path": "registry/marker/marker.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "utils"
+      ],
+      "dependencies": {
+        "class-variance-authority": "0.7.1"
+      },
+      "exports": [
+        "Marker",
+        "MarkerContent",
+        "MarkerIcon",
+        "MarkerProps",
+        "markerVariants"
+      ],
+      "primitives": [
+        "Polymorphic",
+        "PolymorphicProps",
+        "PolymorphicTarget"
+      ],
+      "tailwind": {
+        "tokens": [
+          "border",
+          "foreground",
+          "muted-foreground",
+          "ring"
+        ],
+        "animations": true
+      }
+    },
+    {
+      "name": "menubar",
+      "type": "ui",
+      "title": "Menubar",
+      "description": "A visually persistent menu common in desktop applications that provides quick access to a consistent set of commands.",
+      "files": [
+        {
+          "path": "registry/menubar/menubar.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "icons",
+        "utils"
+      ],
+      "dependencies": {},
+      "exports": [
+        "Menubar",
+        "MenubarCheckboxItem",
+        "MenubarContent",
+        "MenubarGroup",
+        "MenubarItem",
+        "MenubarItemExtraProps",
+        "MenubarItemProps",
+        "MenubarLabel",
+        "MenubarLabelProps",
+        "MenubarMenu",
+        "MenubarPortal",
+        "MenubarRadioGroup",
+        "MenubarRadioItem",
+        "MenubarSeparator",
+        "MenubarShortcut",
+        "MenubarSub",
+        "MenubarSubContent",
+        "MenubarSubTrigger",
+        "MenubarTrigger"
+      ],
+      "primitives": [
+        "MenuCheckboxItemProps",
+        "MenuGroupProps",
+        "MenuItemOwnProps",
+        "MenuLabelProps",
+        "MenuPortalProps",
+        "MenuRadioGroupProps",
+        "MenuRadioItemProps",
+        "MenuSeparatorProps",
+        "MenuSubContentProps",
+        "MenuSubProps",
+        "MenuSubTriggerProps",
+        "Menubar",
+        "MenubarContentProps",
+        "MenubarMenuProps",
+        "MenubarProps",
+        "MenubarTriggerProps",
+        "PolymorphicProps",
+        "PolymorphicTarget"
+      ],
+      "tailwind": {
+        "tokens": [
+          "accent",
+          "accent-foreground",
+          "background",
+          "border",
+          "destructive",
+          "foreground",
+          "muted-foreground",
+          "popover",
+          "popover-foreground"
+        ],
+        "animations": true
+      }
+    },
+    {
+      "name": "message",
+      "type": "ui",
+      "title": "Message",
+      "description": "One message in a conversation: the avatar, the alignment, a header, the content and a footer of actions.",
+      "files": [
+        {
+          "path": "registry/message/message.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "utils"
+      ],
+      "dependencies": {
+        "class-variance-authority": "0.7.1"
+      },
+      "exports": [
+        "Message",
+        "MessageAvatar",
+        "MessageContent",
+        "MessageFooter",
+        "MessageGroup",
+        "MessageHeader",
+        "MessageProps",
+        "messageVariants"
+      ],
+      "primitives": [],
+      "tailwind": {
+        "tokens": [
+          "muted-foreground"
+        ],
+        "animations": false
+      }
+    },
+    {
+      "name": "message-scroller",
+      "type": "ui",
+      "title": "Message Scroller",
+      "description": "A chat transcript scroller that keeps the reader's place while a reply streams: anchored turns, following the newest text, history loading and a jump button.",
+      "files": [
+        {
+          "path": "registry/message-scroller/message-scroller.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "icons",
+        "ui-strings",
+        "utils"
+      ],
+      "dependencies": {},
+      "exports": [
+        "MessageScroller",
+        "MessageScrollerButton",
+        "MessageScrollerContent",
+        "MessageScrollerItem",
+        "MessageScrollerProvider",
+        "MessageScrollerViewport",
+        "useMessageScroller",
+        "useMessageScrollerScrollable",
+        "useMessageScrollerVisibility"
+      ],
+      "primitives": [
+        "MessageScroller",
+        "MessageScrollerButtonProps",
+        "MessageScrollerContentProps",
+        "MessageScrollerItemProps",
+        "MessageScrollerProviderProps",
+        "MessageScrollerRootProps",
+        "MessageScrollerViewportProps",
+        "PolymorphicTarget",
+        "useMessageScroller",
+        "useMessageScrollerScrollable",
+        "useMessageScrollerVisibility"
+      ],
+      "tailwind": {
+        "tokens": [
+          "accent",
+          "background",
+          "foreground",
+          "ring"
+        ],
+        "animations": false
+      }
+    },
+    {
+      "name": "native-select",
+      "type": "ui",
+      "title": "Native Select",
+      "description": "The browser's own select, styled like an input, with its picker and keyboard support.",
+      "files": [
+        {
+          "path": "registry/native-select/native-select.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "icons",
+        "utils"
+      ],
+      "dependencies": {},
+      "exports": [
+        "NativeSelect",
+        "NativeSelectOptGroup",
+        "NativeSelectOption",
+        "NativeSelectProps"
+      ],
+      "primitives": [],
+      "tailwind": {
+        "tokens": [
+          "destructive",
+          "input",
+          "primary",
+          "primary-foreground",
+          "ring"
+        ],
+        "animations": false
+      }
+    },
+    {
+      "name": "navigation-menu",
+      "type": "ui",
+      "title": "Navigation Menu",
+      "description": "Site navigation with flyout content, keyboard arrows between triggers, Escape to close and focus return.",
+      "files": [
+        {
+          "path": "registry/navigation-menu/navigation-menu.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "icons",
+        "utils"
+      ],
+      "dependencies": {
+        "class-variance-authority": "0.7.1"
+      },
+      "exports": [
+        "NavigationMenu",
+        "NavigationMenuContent",
+        "NavigationMenuIndicator",
+        "NavigationMenuItem",
+        "NavigationMenuLink",
+        "NavigationMenuList",
+        "NavigationMenuProps",
+        "NavigationMenuTrigger",
+        "NavigationMenuViewport",
+        "navigationMenuTriggerStyle"
+      ],
+      "primitives": [
+        "NavigationMenu",
+        "NavigationMenuProps"
+      ],
+      "tailwind": {
+        "tokens": [
+          "accent",
+          "accent-foreground",
+          "background",
+          "border",
+          "foreground",
+          "popover",
+          "popover-foreground",
+          "ring"
+        ],
+        "animations": true
+      }
+    },
+    {
+      "name": "pagination",
+      "type": "ui",
+      "title": "Pagination",
+      "description": "Pagination with page navigation, next and previous links.",
+      "files": [
+        {
+          "path": "registry/pagination/pagination.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "button",
+        "icons",
+        "ui-strings",
+        "utils"
+      ],
+      "dependencies": {
+        "class-variance-authority": "0.7.1"
+      },
+      "exports": [
+        "Pagination",
+        "PaginationContent",
+        "PaginationEllipsis",
+        "PaginationItem",
+        "PaginationItemProps",
+        "PaginationItems",
+        "PaginationLink",
+        "PaginationLinkProps",
+        "PaginationNext",
+        "PaginationNextUiProps",
+        "PaginationPrevious",
+        "PaginationPreviousUiProps",
+        "PaginationSizeProps"
+      ],
+      "primitives": [
+        "Pagination",
+        "PaginationEllipsisProps",
+        "PaginationItemProps",
+        "PaginationItemsProps",
+        "PaginationListProps",
+        "PaginationNextProps",
+        "PaginationPreviousProps",
+        "PaginationProps",
+        "PaginationRangeItem",
+        "Polymorphic",
+        "PolymorphicProps",
+        "PolymorphicTarget",
+        "paginationContext"
+      ],
+      "tailwind": {
+        "tokens": [],
+        "animations": false
+      }
+    },
+    {
+      "name": "password-input",
+      "type": "ui",
+      "title": "Password input",
+      "description": "A password field with a show and hide button, a strength meter slot and a Caps Lock hint, built on the PasswordToggleField primitive.",
+      "files": [
+        {
+          "path": "registry/password-input/password-input.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "ui-strings",
+        "utils"
+      ],
+      "dependencies": {},
+      "exports": [
+        "PasswordInput",
+        "PasswordInputProps",
+        "PasswordInputState",
+        "PasswordStrength",
+        "PasswordStrengthProps",
+        "scorePassword",
+        "usePasswordInput"
+      ],
+      "primitives": [
+        "PasswordToggleField",
+        "createPartContext",
+        "mergeElementProps",
+        "useBaseId"
+      ],
+      "tailwind": {
+        "tokens": [
+          "chart-4",
+          "destructive",
+          "foreground",
+          "input",
+          "muted",
+          "muted-foreground",
+          "primary",
+          "primary-foreground",
+          "ring"
+        ],
+        "animations": false
+      }
+    },
+    {
+      "name": "popover",
+      "type": "ui",
+      "title": "Popover",
+      "description": "Displays rich content in a portal, triggered by a button.",
+      "files": [
+        {
+          "path": "registry/popover/popover.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "utils"
+      ],
+      "dependencies": {},
+      "exports": [
+        "Popover",
+        "PopoverAnchor",
+        "PopoverClose",
+        "PopoverContent",
+        "PopoverDescription",
+        "PopoverHeader",
+        "PopoverTitle",
+        "PopoverTrigger"
+      ],
+      "primitives": [
+        "PolymorphicTarget",
+        "Popover",
+        "PopoverAnchorProps",
+        "PopoverCloseProps",
+        "PopoverContentProps",
+        "PopoverDescriptionProps",
+        "PopoverProps",
+        "PopoverTitleProps",
+        "PopoverTriggerProps"
+      ],
+      "tailwind": {
+        "tokens": [
+          "muted-foreground",
+          "popover",
+          "popover-foreground"
+        ],
+        "animations": true
+      }
+    },
+    {
+      "name": "progress",
+      "type": "ui",
+      "title": "Progress",
+      "description": "A compact or composable progress bar with a track, indicator, visible label and value.",
+      "files": [
+        {
+          "path": "registry/progress/progress.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "utils"
+      ],
+      "dependencies": {},
+      "exports": [
+        "Progress",
+        "ProgressIndicator",
+        "ProgressIndicatorProps",
+        "ProgressLabel",
+        "ProgressLabelProps",
+        "ProgressProps",
+        "ProgressTrack",
+        "ProgressValue",
+        "ProgressValueProps"
+      ],
+      "primitives": [
+        "PolymorphicTarget",
+        "Progress",
+        "ProgressIndicatorProps",
+        "ProgressLabelProps",
+        "ProgressProps",
+        "ProgressValueProps",
+        "progressContext"
+      ],
+      "tailwind": {
+        "tokens": [
+          "muted-foreground",
+          "primary"
+        ],
+        "animations": false
+      }
+    },
+    {
+      "name": "questionnaire",
+      "type": "ui",
+      "title": "Questionnaire",
+      "description": "A multi-step form of single-choice, multiple-choice, free-text and skippable questions, one at a time, with progress, validation and keyboard shortcuts.",
+      "files": [
+        {
+          "path": "registry/questionnaire/questionnaire.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "button",
+        "ui-strings",
+        "utils"
+      ],
+      "dependencies": {},
+      "exports": [
+        "Questionnaire",
+        "QuestionnaireActions",
+        "QuestionnaireChoice",
+        "QuestionnaireChoiceInputProps",
+        "QuestionnaireChoices",
+        "QuestionnaireDescription",
+        "QuestionnaireError",
+        "QuestionnaireInput",
+        "QuestionnaireItem",
+        "QuestionnaireNext",
+        "QuestionnairePrevious",
+        "QuestionnaireProgress",
+        "QuestionnaireSkip",
+        "QuestionnaireSubmit",
+        "QuestionnaireTitle"
+      ],
+      "primitives": [
+        "PolymorphicTarget",
+        "Questionnaire",
+        "QuestionnaireChoiceInputProps",
+        "QuestionnaireChoiceProps",
+        "QuestionnaireChoicesProps",
+        "QuestionnaireDescriptionProps",
+        "QuestionnaireErrorProps",
+        "QuestionnaireInputProps",
+        "QuestionnaireItemProps",
+        "QuestionnaireNextProps",
+        "QuestionnaireOwnProps",
+        "QuestionnairePreviousProps",
+        "QuestionnaireProgressProps",
+        "QuestionnaireSkipProps",
+        "QuestionnaireSubmitProps",
+        "QuestionnaireTitleProps"
+      ],
+      "tailwind": {
+        "tokens": [
+          "accent",
+          "destructive",
+          "input",
+          "muted",
+          "muted-foreground",
+          "primary",
+          "ring"
+        ],
+        "animations": false
+      }
+    },
+    {
+      "name": "radio-group",
+      "type": "ui",
+      "title": "Radio Group",
+      "description": "A set of checkable buttons, known as radio buttons, where no more than one can be checked at a time.",
+      "files": [
+        {
+          "path": "registry/radio-group/radio-group.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "icons",
+        "utils"
+      ],
+      "dependencies": {},
+      "exports": [
+        "RadioGroup",
+        "RadioGroupItem"
+      ],
+      "primitives": [
+        "PolymorphicTarget",
+        "RadioGroup",
+        "RadioGroupItemProps",
+        "RadioGroupProps"
+      ],
+      "tailwind": {
+        "tokens": [
+          "destructive",
+          "input",
+          "primary",
+          "ring"
+        ],
+        "animations": false
+      }
+    },
+    {
+      "name": "resizable",
+      "type": "ui",
+      "title": "Resizable",
+      "description": "Panels with draggable handles: pointer and keyboard resizing with bounds, an optional saved layout, and right-to-left support.",
+      "files": [
+        {
+          "path": "registry/resizable/resizable.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "icons",
+        "ui-strings",
+        "utils"
+      ],
+      "dependencies": {},
+      "exports": [
+        "ResizableHandle",
+        "ResizableHandleProps",
+        "ResizablePanel",
+        "ResizablePanelGroup",
+        "ResizablePanelGroupProps",
+        "ResizablePanelProps",
+        "resizeSizes"
+      ],
+      "primitives": [
+        "Direction",
+        "createPartContext",
+        "useDirectionAround",
+        "useRefSignal"
+      ],
+      "tailwind": {
+        "tokens": [
+          "border",
+          "ring"
+        ],
+        "animations": false
+      }
+    },
+    {
+      "name": "scroll-area",
+      "type": "ui",
+      "title": "Scroll Area",
+      "description": "A scrollable region with thin custom scrollbars, a draggable thumb and keyboard scrolling.",
+      "files": [
+        {
+          "path": "registry/scroll-area/scroll-area.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "utils"
+      ],
+      "dependencies": {},
+      "exports": [
+        "ScrollArea",
+        "ScrollAreaProps",
+        "ScrollBar",
+        "ScrollBarProps"
+      ],
+      "primitives": [
+        "ScrollArea",
+        "ScrollAreaProps",
+        "ScrollAreaScrollbarProps"
+      ],
+      "tailwind": {
+        "tokens": [
+          "border",
+          "ring"
+        ],
+        "animations": false
+      }
+    },
+    {
+      "name": "select",
+      "type": "ui",
+      "title": "Select",
+      "description": "Displays a list of options for the user to pick from, triggered by a button.",
+      "files": [
+        {
+          "path": "registry/select/select.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "icons",
+        "utils"
+      ],
+      "dependencies": {},
+      "exports": [
+        "Select",
+        "SelectContent",
+        "SelectContentExtraProps",
+        "SelectContentProps",
+        "SelectGroup",
+        "SelectItem",
+        "SelectItemProps",
+        "SelectLabel",
+        "SelectScrollDownButton",
+        "SelectScrollUpButton",
+        "SelectSeparator",
+        "SelectTrigger",
+        "SelectTriggerExtraProps",
+        "SelectTriggerProps",
+        "SelectValue"
+      ],
+      "primitives": [
+        "PolymorphicTarget",
+        "Select",
+        "SelectContentProps",
+        "SelectGroupProps",
+        "SelectItemAlignedContent",
+        "SelectItemProps",
+        "SelectLabelProps",
+        "SelectProps",
+        "SelectScrollButtonProps",
+        "SelectSeparatorProps",
+        "SelectTriggerProps",
+        "SelectValueProps"
+      ],
+      "tailwind": {
+        "tokens": [
+          "accent",
+          "accent-foreground",
+          "border",
+          "destructive",
+          "foreground",
+          "input",
+          "muted-foreground",
+          "popover",
+          "popover-foreground",
+          "ring"
+        ],
+        "animations": true
+      }
+    },
+    {
+      "name": "separator",
+      "type": "ui",
+      "title": "Separator",
+      "description": "Visually or semantically separates content.",
+      "files": [
+        {
+          "path": "registry/separator/separator.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "utils"
+      ],
+      "dependencies": {},
+      "exports": [
+        "Separator"
+      ],
+      "primitives": [
+        "Separator",
+        "SeparatorProps"
+      ],
+      "tailwind": {
+        "tokens": [
+          "border"
+        ],
+        "animations": false
+      }
+    },
+    {
+      "name": "sheet",
+      "type": "ui",
+      "title": "Sheet",
+      "description": "Extends the Dialog component to display content that complements the main content of the screen.",
+      "files": [
+        {
+          "path": "registry/sheet/sheet.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "icons",
+        "ui-strings",
+        "utils"
+      ],
+      "dependencies": {},
+      "exports": [
+        "Sheet",
+        "SheetClose",
+        "SheetContent",
+        "SheetContentExtraProps",
+        "SheetDescription",
+        "SheetFooter",
+        "SheetHeader",
+        "SheetOverlay",
+        "SheetPortal",
+        "SheetSide",
+        "SheetTitle",
+        "SheetTrigger"
+      ],
+      "primitives": [
+        "Dialog",
+        "DialogCloseProps",
+        "DialogContentProps",
+        "DialogDescriptionProps",
+        "DialogOverlayProps",
+        "DialogPortalProps",
+        "DialogProps",
+        "DialogTitleProps",
+        "DialogTriggerProps",
+        "PolymorphicTarget"
+      ],
+      "tailwind": {
+        "tokens": [
+          "background",
+          "foreground",
+          "muted-foreground",
+          "ring",
+          "secondary"
+        ],
+        "animations": true
+      }
+    },
+    {
+      "name": "sidebar",
+      "type": "ui",
+      "title": "Sidebar",
+      "description": "A composable, collapsible sidebar that becomes a sheet on mobile, with menus, groups, tooltips and a Ctrl/Cmd+B shortcut.",
+      "files": [
+        {
+          "path": "registry/sidebar/sidebar.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "button",
+        "icons",
+        "input",
+        "separator",
+        "sheet",
+        "skeleton",
+        "tooltip",
+        "ui-strings",
+        "use-mobile",
+        "utils"
+      ],
+      "dependencies": {
+        "class-variance-authority": "0.7.1"
+      },
+      "exports": [
+        "SIDEBAR_COOKIE_NAME",
+        "Sidebar",
+        "SidebarContent",
+        "SidebarContextValue",
+        "SidebarCookieOptions",
+        "SidebarFooter",
+        "SidebarGroup",
+        "SidebarGroupAction",
+        "SidebarGroupActionProps",
+        "SidebarGroupContent",
+        "SidebarGroupLabel",
+        "SidebarGroupLabelProps",
+        "SidebarHeader",
+        "SidebarInput",
+        "SidebarInset",
+        "SidebarInsetProps",
+        "SidebarMenu",
+        "SidebarMenuAction",
+        "SidebarMenuActionProps",
+        "SidebarMenuBadge",
+        "SidebarMenuButton",
+        "SidebarMenuButtonExtraProps",
+        "SidebarMenuButtonProps",
+        "SidebarMenuItem",
+        "SidebarMenuSkeleton",
+        "SidebarMenuSub",
+        "SidebarMenuSubButton",
+        "SidebarMenuSubButtonProps",
+        "SidebarMenuSubItem",
+        "SidebarProps",
+        "SidebarProvider",
+        "SidebarProviderProps",
+        "SidebarRail",
+        "SidebarSeparator",
+        "SidebarTrigger",
+        "readSidebarCookie",
+        "sidebarCookie",
+        "sidebarMenuButtonVariants",
+        "useSidebar"
+      ],
+      "primitives": [
+        "Polymorphic",
+        "PolymorphicProps",
+        "PolymorphicTarget",
+        "SeparatorProps",
+        "TooltipContentProps",
+        "callHandler",
+        "createPartContext",
+        "useBaseId",
+        "useControllableState",
+        "useDirectionAround",
+        "useRefSignal"
+      ],
+      "tailwind": {
+        "tokens": [
+          "background",
+          "foreground",
+          "sidebar",
+          "sidebar-accent",
+          "sidebar-accent-foreground",
+          "sidebar-border",
+          "sidebar-foreground",
+          "sidebar-ring"
+        ],
+        "animations": false
+      }
+    },
+    {
+      "name": "skeleton",
+      "type": "ui",
+      "title": "Skeleton",
+      "description": "Use to show a placeholder while content is loading.",
+      "files": [
+        {
+          "path": "registry/skeleton/skeleton.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "utils"
+      ],
+      "dependencies": {},
+      "exports": [
+        "Skeleton"
+      ],
+      "primitives": [],
+      "tailwind": {
+        "tokens": [
+          "accent"
+        ],
+        "animations": false
+      }
+    },
+    {
+      "name": "slider",
+      "type": "ui",
+      "title": "Slider",
+      "description": "An input where the user selects a value, or a range, from within a given range.",
+      "files": [
+        {
+          "path": "registry/slider/slider.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "utils"
+      ],
+      "dependencies": {},
+      "exports": [
+        "Slider",
+        "SliderExtraProps",
+        "SliderProps"
+      ],
+      "primitives": [
+        "PolymorphicTarget",
+        "Slider",
+        "SliderProps"
+      ],
+      "tailwind": {
+        "tokens": [
+          "muted",
+          "primary",
+          "ring"
+        ],
+        "animations": false
+      }
+    },
+    {
+      "name": "spinner",
+      "type": "ui",
+      "title": "Spinner",
+      "description": "An indicator that can be used to show a loading state.",
+      "files": [
+        {
+          "path": "registry/spinner/spinner.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "icons",
+        "ui-strings",
+        "utils"
+      ],
+      "dependencies": {},
+      "exports": [
+        "Spinner"
+      ],
+      "primitives": [],
+      "tailwind": {
+        "tokens": [],
+        "animations": false
+      }
+    },
+    {
+      "name": "switch",
+      "type": "ui",
+      "title": "Switch",
+      "description": "A control that allows the user to toggle between checked and not checked.",
+      "files": [
+        {
+          "path": "registry/switch/switch.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "utils"
+      ],
+      "dependencies": {},
+      "exports": [
+        "Switch",
+        "SwitchExtraProps",
+        "SwitchProps"
+      ],
+      "primitives": [
+        "PolymorphicTarget",
+        "Switch",
+        "SwitchProps"
+      ],
+      "tailwind": {
+        "tokens": [
+          "background",
+          "destructive",
+          "foreground",
+          "input",
+          "primary",
+          "primary-foreground",
+          "ring"
+        ],
+        "animations": false
+      }
+    },
+    {
+      "name": "table",
+      "type": "ui",
+      "title": "Table",
+      "description": "A responsive table component.",
+      "files": [
+        {
+          "path": "registry/table/table.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "utils"
+      ],
+      "dependencies": {},
+      "exports": [
+        "Table",
+        "TableBody",
+        "TableCaption",
+        "TableCell",
+        "TableFooter",
+        "TableHead",
+        "TableHeader",
+        "TableRow"
+      ],
+      "primitives": [],
+      "tailwind": {
+        "tokens": [
+          "foreground",
+          "muted",
+          "muted-foreground"
+        ],
+        "animations": false
+      }
+    },
+    {
+      "name": "tabs",
+      "type": "ui",
+      "title": "Tabs",
+      "description": "A set of layered sections of content, known as tab panels, that are displayed one at a time.",
+      "files": [
+        {
+          "path": "registry/tabs/tabs.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "utils"
+      ],
+      "dependencies": {},
+      "exports": [
+        "Tabs",
+        "TabsContent",
+        "TabsList",
+        "TabsListOwnProps",
+        "TabsTrigger"
+      ],
+      "primitives": [
+        "Tabs",
+        "TabsContentProps",
+        "TabsListProps",
+        "TabsProps",
+        "TabsTriggerProps"
+      ],
+      "tailwind": {
+        "tokens": [
+          "background",
+          "foreground",
+          "input",
+          "muted",
+          "muted-foreground",
+          "ring"
+        ],
+        "animations": false
+      }
+    },
+    {
+      "name": "textarea",
+      "type": "ui",
+      "title": "Textarea",
+      "description": "A multi-line text field that grows with its content.",
+      "files": [
+        {
+          "path": "registry/textarea/textarea.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "utils"
+      ],
+      "dependencies": {},
+      "exports": [
+        "Textarea"
+      ],
+      "primitives": [],
+      "tailwind": {
+        "tokens": [
+          "destructive",
+          "input",
+          "muted-foreground",
+          "ring"
+        ],
+        "animations": false
+      }
+    },
+    {
+      "name": "toast",
+      "type": "ui",
+      "title": "Toast",
+      "description": "Toast stores (useToast in components, createToaster in module code) and the Toaster that shows their notifications, after Sonner.",
+      "files": [
+        {
+          "path": "registry/toast/toast.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "button",
+        "icons",
+        "ui-strings",
+        "utils"
+      ],
+      "dependencies": {},
+      "exports": [
+        "ExternalToast",
+        "ToastAction",
+        "ToastActionProps",
+        "ToastAddOptions",
+        "ToastApi",
+        "ToastPosition",
+        "ToastPromiseContent",
+        "ToastPromiseData",
+        "ToastPromiseResult",
+        "ToastStore",
+        "ToastSummary",
+        "ToastVariant",
+        "Toaster",
+        "ToasterProps",
+        "createToaster",
+        "useToast"
+      ],
+      "primitives": [
+        "SwipeDirection",
+        "Toast",
+        "ToastItem",
+        "ToastPatch",
+        "ToastType",
+        "Toaster",
+        "createToaster",
+        "useDirection"
+      ],
+      "tailwind": {
+        "tokens": [
+          "destructive",
+          "muted-foreground",
+          "popover",
+          "popover-foreground",
+          "ring"
+        ],
+        "animations": true
+      }
+    },
+    {
+      "name": "toggle",
+      "type": "ui",
+      "title": "Toggle",
+      "description": "A two-state button that can be either on or off.",
+      "files": [
+        {
+          "path": "registry/toggle/toggle.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "utils"
+      ],
+      "dependencies": {
+        "class-variance-authority": "0.7.1"
+      },
+      "exports": [
+        "Toggle",
+        "ToggleProps",
+        "toggleVariants"
+      ],
+      "primitives": [
+        "PolymorphicTarget",
+        "Toggle",
+        "ToggleProps"
+      ],
+      "tailwind": {
+        "tokens": [
+          "accent",
+          "accent-foreground",
+          "destructive",
+          "foreground",
+          "input",
+          "muted",
+          "muted-foreground",
+          "ring"
+        ],
+        "animations": false
+      }
+    },
+    {
+      "name": "toggle-group",
+      "type": "ui",
+      "title": "Toggle Group",
+      "description": "A set of two-state buttons that can be toggled on or off.",
+      "files": [
+        {
+          "path": "registry/toggle-group/toggle-group.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "toggle",
+        "utils"
+      ],
+      "dependencies": {
+        "class-variance-authority": "0.7.1"
+      },
+      "exports": [
+        "ToggleGroup",
+        "ToggleGroupItem",
+        "ToggleGroupItemProps",
+        "ToggleGroupProps"
+      ],
+      "primitives": [
+        "PolymorphicTarget",
+        "ToggleGroup",
+        "ToggleGroupItemProps",
+        "ToggleGroupProps"
+      ],
+      "tailwind": {
+        "tokens": [],
+        "animations": false
+      }
+    },
+    {
+      "name": "tooltip",
+      "type": "ui",
+      "title": "Tooltip",
+      "description": "A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.",
+      "files": [
+        {
+          "path": "registry/tooltip/tooltip.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "utils"
+      ],
+      "dependencies": {},
+      "exports": [
+        "Tooltip",
+        "TooltipContent",
+        "TooltipProvider",
+        "TooltipTrigger"
+      ],
+      "primitives": [
+        "PolymorphicTarget",
+        "Tooltip",
+        "TooltipContentProps",
+        "TooltipProps",
+        "TooltipProviderProps",
+        "TooltipTriggerProps",
+        "tooltipGroupContext"
+      ],
+      "tailwind": {
+        "tokens": [
+          "background",
+          "foreground"
+        ],
+        "animations": true
+      }
+    },
+    {
+      "name": "trace",
+      "type": "ui",
+      "title": "Trace",
+      "description": "A list of lines for the steps an agent takes: reasoning, tool calls, sources, plans and tasks, each with an icon, a title and a status, and optionally expandable.",
+      "files": [
+        {
+          "path": "registry/trace/trace.tsx",
+          "type": "ui"
+        }
+      ],
+      "registryDependencies": [
+        "collapsible",
+        "icons",
+        "utils"
+      ],
+      "dependencies": {},
+      "exports": [
+        "Trace",
+        "TraceCollapsible",
+        "TraceCollapsibleContent",
+        "TraceCollapsibleContentProps",
+        "TraceCollapsibleTrigger",
+        "TraceDescription",
+        "TraceIcon",
+        "TraceLine",
+        "TraceLineProps",
+        "TraceStatus",
+        "TraceTitle"
+      ],
+      "primitives": [
+        "CollapsibleContentProps",
+        "CollapsibleProps",
+        "CollapsibleTriggerProps",
+        "PolymorphicTarget"
+      ],
+      "tailwind": {
+        "tokens": [
+          "destructive",
+          "foreground",
+          "muted-foreground",
+          "ring"
+        ],
+        "animations": true
+      }
+    },
+    {
+      "name": "ui-strings",
+      "type": "lib",
+      "title": "UI strings",
+      "description": "Translates the built-in words of the kit (Close, Next, Page n of m): a provider and a hook that read a pack such as the Arabic one.",
+      "files": [
+        {
+          "path": "registry/ui-strings/ui-strings.tsx",
+          "type": "lib"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": {},
+      "exports": [
+        "UiStringValues",
+        "UiStringsCatalog",
+        "UiStringsProvider",
+        "UiStringsProviderProps",
+        "UiTranslate",
+        "formatUiString",
+        "useUiLocale",
+        "useUiStrings"
+      ],
+      "primitives": [
+        "createPartContext"
+      ],
+      "tailwind": {
+        "tokens": [],
+        "animations": false
+      }
+    },
+    {
+      "name": "use-highlighted-code",
+      "type": "hook",
+      "title": "useHighlightedCode",
+      "description": "Syntax highlighting for code blocks with Shiki: a hook for the browser and an async function for the server, one element per line.",
+      "files": [
+        {
+          "path": "registry/use-highlighted-code/use-highlighted-code.tsx",
+          "type": "hook"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": {
+        "shiki": "4.5.0"
+      },
+      "exports": [
+        "HighlightedLine",
+        "HighlightedToken",
+        "highlightCode",
+        "useHighlightedCode"
+      ],
+      "primitives": [],
+      "tailwind": {
+        "tokens": [],
+        "animations": false
+      }
+    },
+    {
+      "name": "use-mobile",
+      "type": "hook",
+      "title": "useIsMobile",
+      "description": "A hook that tells whether the viewport is narrower than 768px. Used by the sidebar.",
+      "files": [
+        {
+          "path": "registry/use-mobile/use-mobile.ts",
+          "type": "hook"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": {},
+      "exports": [
+        "useIsMobile"
+      ],
+      "primitives": [],
+      "tailwind": {
+        "tokens": [],
+        "animations": false
+      }
+    },
+    {
+      "name": "utils",
+      "type": "lib",
+      "title": "Utils",
+      "description": "The cn() helper: clsx plus tailwind-merge. Every component imports it.",
+      "files": [
+        {
+          "path": "registry/utils/utils.ts",
+          "type": "lib"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": {
+        "clsx": "2.1.1",
+        "tailwind-merge": "3.7.0"
+      },
+      "exports": [
+        "ClassValue",
+        "cn"
+      ],
+      "primitives": [],
+      "tailwind": {
+        "tokens": [
+          "primary"
+        ],
+        "animations": false
+      }
+    }
+  ]
+}

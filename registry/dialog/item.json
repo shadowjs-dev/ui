@@ -1,0 +1,4 @@
+{
+  "title": "Dialog",
+  "description": "A window overlaid on the primary window, rendering the content underneath inert."
+}

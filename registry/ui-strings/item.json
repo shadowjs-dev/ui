@@ -1,0 +1,5 @@
+{
+  "title": "UI strings",
+  "description": "Translates the built-in words of the kit (Close, Next, Page n of m): a provider and a hook that read a pack such as the Arabic one.",
+  "type": "lib"
+}

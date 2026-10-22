@@ -1,0 +1,5 @@
+{
+  "title": "Utils",
+  "description": "The cn() helper: clsx plus tailwind-merge. Every component imports it.",
+  "type": "lib"
+}

@@ -1,0 +1,251 @@
+/*
+ * @shadow-js/ui typeset: one stylesheet for rendered text (a blog post, the docs, a streaming chat reply). Put the class `typeset`
+ * on the container and a preset class beside it (`typeset-docs`, `typeset-chat`); everything inside is styled, with no class on any child.
+ *
+ *   @import "tailwindcss";
+ *   @import "@shadow-js/ui/theme.css";
+ *   @import "@shadow-js/ui/typeset.css";
+ *
+ *   <article class="typeset typeset-docs">...</article>
+ *
+ * Three variables set the whole rhythm: `--typeset-size` (the base font size), `--typeset-leading` (the line height) and `--typeset-flow`
+ * (the space between blocks). Heading sizes, list indents and gaps are multiples of them, so one change rescales the text. A preset is a small class that
+ * sets the three; define your own for another place in the app.
+ *
+ * Colors, fonts and radius come from the theme tokens, so dark mode and the base color follow without a line here.
+ *
+ * Specificity is zero: every selector is wrapped in `:where()` and lives in the `components` layer, so a Tailwind utility or plain CSS wins without
+ * `!important`. Keep a component out with the class `not-typeset` or the attribute `data-not-typeset`; the exclusion covers its descendants.
+ *
+ * Streaming-safe: nothing here looks ahead. Space comes only from `margin-block-start` and never depends on a later sibling
+ * (no `:last-child`, `:has()` or `~`), so adding a block at the end of the container never restyles the blocks above it.
+ *
+ * Wide tables: wrap the table in an element with the class `typeset-scroll` so it scrolls sideways instead of squeezing.
+ * Right to left: only logical properties are used, so the text, lists and quotes flip with the page.
+ */
+@layer components {
+  :where(.typeset) {
+    --typeset-size: 1rem;
+    --typeset-leading: 1.7;
+    --typeset-flow: 1.25em;
+    font-size: var(--typeset-size);
+    line-height: var(--typeset-leading);
+    color: var(--foreground);
+    overflow-wrap: break-word;
+  }
+
+  :where(.typeset-docs) {
+    --typeset-size: 1rem;
+    --typeset-leading: 1.75;
+    --typeset-flow: 1.25em;
+  }
+
+  :where(.typeset-chat) {
+    --typeset-size: 0.9375rem;
+    --typeset-leading: 1.55;
+    --typeset-flow: 0.75em;
+  }
+
+  /* Space: only above a block, and not above the first one. */
+  :where(
+    .typeset
+      :is(p, ul, ol, dl, blockquote, pre, table, figure, hr, details, .typeset-scroll):not(
+        :where(.not-typeset, .not-typeset *, [data-not-typeset], [data-not-typeset] *)
+      ):not(:first-child)
+  ) {
+    margin-block-start: var(--typeset-flow);
+  }
+
+  :where(
+    .typeset
+      :is(h1, h2, h3, h4, h5, h6):not(
+        :where(.not-typeset, .not-typeset *, [data-not-typeset], [data-not-typeset] *)
+      )
+  ) {
+    font-weight: 650;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+    scroll-margin-block-start: 5rem;
+  }
+
+  :where(
+    .typeset
+      :is(h1, h2, h3, h4, h5, h6):not(
+        :where(.not-typeset, .not-typeset *, [data-not-typeset], [data-not-typeset] *)
+      ):not(:first-child)
+  ) {
+    margin-block-start: calc(var(--typeset-flow) * 1.6);
+  }
+
+  :where(.typeset h1:not(:where(.not-typeset *, [data-not-typeset *]))) {
+    font-size: 2.25em;
+    line-height: 1.15;
+    font-weight: 750;
+    letter-spacing: -0.025em;
+  }
+
+  :where(.typeset h2:not(:where(.not-typeset *, [data-not-typeset *]))) {
+    font-size: 1.5em;
+    line-height: 1.25;
+  }
+
+  :where(.typeset h3:not(:where(.not-typeset *, [data-not-typeset *]))) {
+    font-size: 1.25em;
+    line-height: 1.35;
+  }
+
+  :where(.typeset :is(h4, h5, h6):not(:where(.not-typeset *, [data-not-typeset *]))) {
+    font-size: 1em;
+    line-height: 1.5;
+  }
+
+  /* A heading is followed by its text closely. */
+  :where(
+    .typeset
+      :is(h1, h2, h3, h4, h5, h6):not(:where(.not-typeset *, [data-not-typeset *]))
+      + :is(p, ul, ol, pre, table, blockquote)
+  ) {
+    margin-block-start: calc(var(--typeset-flow) * 0.6);
+  }
+
+  :where(.typeset :is(ul, ol):not(:where(.not-typeset *, [data-not-typeset *]))) {
+    padding-inline-start: 1.5em;
+  }
+
+  :where(.typeset ul:not(:where(.not-typeset *, [data-not-typeset *]))) {
+    list-style: disc;
+  }
+
+  :where(.typeset ol:not(:where(.not-typeset *, [data-not-typeset *]))) {
+    list-style: decimal;
+  }
+
+  :where(.typeset li:not(:where(.not-typeset *, [data-not-typeset *]))::marker) {
+    color: var(--muted-foreground);
+  }
+
+  :where(.typeset li:not(:where(.not-typeset *, [data-not-typeset *])) + li) {
+    margin-block-start: 0.4em;
+  }
+
+  /* A list inside a list item sits close to the item's own text. */
+  :where(.typeset li:not(:where(.not-typeset *, [data-not-typeset *])) > :is(ul, ol)) {
+    margin-block-start: 0.4em;
+  }
+
+  :where(.typeset a:not(:where(.not-typeset *, [data-not-typeset *]))) {
+    color: var(--foreground);
+    font-weight: 500;
+    text-decoration-line: underline;
+    text-decoration-color: color-mix(in oklab, currentColor 35%, transparent);
+    text-underline-offset: 0.2em;
+  }
+
+  :where(.typeset a:not(:where(.not-typeset *, [data-not-typeset *])):hover) {
+    text-decoration-color: currentColor;
+  }
+
+  :where(.typeset strong:not(:where(.not-typeset *, [data-not-typeset *]))) {
+    font-weight: 650;
+  }
+
+  :where(.typeset blockquote:not(:where(.not-typeset *, [data-not-typeset *]))) {
+    border-inline-start: 3px solid var(--border);
+    padding-inline-start: 1em;
+    color: var(--muted-foreground);
+  }
+
+  :where(.typeset :not(pre) > code:not(:where(.not-typeset *, [data-not-typeset *]))) {
+    font-family: var(--font-mono, ui-monospace, "SF Mono", Menlo, Consolas, monospace);
+    font-size: 0.875em;
+    padding: 0.15em 0.4em;
+    border-radius: calc(var(--radius) - 4px);
+    background-color: var(--muted);
+  }
+
+  :where(.typeset pre:not(:where(.not-typeset *, [data-not-typeset *]))) {
+    font-family: var(--font-mono, ui-monospace, "SF Mono", Menlo, Consolas, monospace);
+    font-size: 0.875em;
+    line-height: 1.65;
+    padding: 0.9em 1.1em;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background-color: var(--muted);
+    overflow-x: auto;
+    direction: ltr;
+    text-align: start;
+  }
+
+  :where(.typeset pre:not(:where(.not-typeset *, [data-not-typeset *])) code) {
+    font: inherit;
+    padding: 0;
+    background: none;
+    border-radius: 0;
+  }
+
+  :where(.typeset kbd:not(:where(.not-typeset *, [data-not-typeset *]))) {
+    font-family: var(--font-mono, ui-monospace, "SF Mono", Menlo, Consolas, monospace);
+    font-size: 0.8em;
+    padding: 0.1em 0.45em;
+    border: 1px solid var(--border);
+    border-block-end-width: 2px;
+    border-radius: calc(var(--radius) - 4px);
+    background-color: var(--muted);
+  }
+
+  :where(.typeset hr:not(:where(.not-typeset *, [data-not-typeset *]))) {
+    border: 0;
+    border-block-start: 1px solid var(--border);
+    margin-block: calc(var(--typeset-flow) * 1.6) 0;
+  }
+
+  :where(.typeset :is(img, video, svg):not(:where(.not-typeset *, [data-not-typeset *]))) {
+    max-inline-size: 100%;
+    block-size: auto;
+    border-radius: var(--radius);
+  }
+
+  :where(.typeset figcaption:not(:where(.not-typeset *, [data-not-typeset *]))) {
+    margin-block-start: 0.6em;
+    font-size: 0.875em;
+    color: var(--muted-foreground);
+  }
+
+  :where(.typeset table:not(:where(.not-typeset *, [data-not-typeset *]))) {
+    inline-size: 100%;
+    border-collapse: collapse;
+    font-size: 0.9375em;
+  }
+
+  :where(.typeset :is(th, td):not(:where(.not-typeset *, [data-not-typeset *]))) {
+    padding: 0.5em 0.75em;
+    text-align: start;
+    border-block-end: 1px solid var(--border);
+    vertical-align: top;
+  }
+
+  :where(.typeset th:not(:where(.not-typeset *, [data-not-typeset *]))) {
+    font-weight: 600;
+    color: var(--foreground);
+  }
+
+  :where(.typeset .typeset-scroll) {
+    overflow-x: auto;
+  }
+
+  :where(.typeset .typeset-scroll > table) {
+    min-inline-size: max-content;
+  }
+
+  :where(.typeset :is(mark):not(:where(.not-typeset *, [data-not-typeset *]))) {
+    background-color: color-mix(in oklab, var(--primary) 18%, transparent);
+    color: inherit;
+    border-radius: 0.2em;
+    padding-inline: 0.15em;
+  }
+
+  :where(.typeset small:not(:where(.not-typeset *, [data-not-typeset *]))) {
+    font-size: 0.875em;
+    color: var(--muted-foreground);
+  }
+}

@@ -1,0 +1,4 @@
+{
+  "title": "Date Picker",
+  "description": "A date text field with a calendar in a popover; typed dates follow the locale and are checked against the limits."
+}
