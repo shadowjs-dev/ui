@@ -1,6 +1,6 @@
 {
   "name": "@shadow-js/ui",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "frameworkDependencies": [
     "@shadow-js/core",
     "@shadow-js/primitives",
@@ -1061,7 +1061,7 @@
         "utils"
       ],
       "dependencies": {
-        "@shadow-js/table": "1.0.0"
+        "@shadow-js/table": "1.0.1"
       },
       "exports": [
         "DataTable",

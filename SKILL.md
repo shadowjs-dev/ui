@@ -5,7 +5,7 @@ description: "Work with @shadow-js/ui. shadcn-style components you add to your p
 
 # @shadow-js/ui
 
-Version 1.0.0. shadcn-style components you add to your project with a CLI, styled with Tailwind v4.
+Version 1.0.1. shadcn-style components you add to your project with a CLI, styled with Tailwind v4.
 
 ## Where to read more
 
@@ -23,9 +23,9 @@ npm install @shadow-js/ui @shadow-js/core @shadow-js/primitives @shadow-js/web
 
 | Package | Range | Required |
 | --- | --- | --- |
-| `@shadow-js/core` | `^1.0.0` | yes |
-| `@shadow-js/primitives` | `^1.0.0` | yes |
-| `@shadow-js/web` | `^1.0.0` | yes |
+| `@shadow-js/core` | `^1.0.1` | yes |
+| `@shadow-js/primitives` | `^1.0.1` | yes |
+| `@shadow-js/web` | `^1.0.1` | yes |
 
 ## Import paths
 
