@@ -519,12 +519,19 @@ export async function runInit(ctx: CliContext, flags: InitFlags): Promise<number
       return "created";
     };
 
+    // Every path init will write is checked before the first write, so a refused one (a stylesheet
+    // outside the project, an alias that maps nowhere) leaves the project as it was.
+    const configPath = resolveInsideReal(ctx.fs, ctx.cwd, "components.json");
+    const themeFile = themePathFor(config.tailwind.css);
+    resolveInsideReal(ctx.fs, ctx.cwd, themeFile);
+    const cssPath = resolveInsideReal(ctx.fs, ctx.cwd, config.tailwind.css);
+    const utils = planInitUtils(ctx, config);
+
     ctx.report?.set("dryRun", flags.dryRun);
     ctx.report?.set("config", { baseColor, css: config.tailwind.css });
     ctx.report?.set("files", []);
     ctx.out("Setting up @shadow-js/ui");
     const configText = serializeConfig(config);
-    const configPath = resolveInsideReal(ctx.fs, ctx.cwd, "components.json");
     const configNow = ctx.fs.read(configPath);
     // Only a changed base color or stylesheet rewrites an existing file; a plain re-run leaves it
     // alone, whatever its layout or extra keys.
@@ -545,7 +552,6 @@ export async function runInit(ctx: CliContext, flags: InitFlags): Promise<number
       write("components.json", configText, "components.json");
     }
 
-    const themeFile = themePathFor(config.tailwind.css);
     const themeLabel = themeFile.replaceAll("\\", "/");
     const themeText = buildThemeCss(ctx.registry, config.tailwind.baseColor);
     const themeCurrent = ctx.fs.read(resolveInsideReal(ctx.fs, ctx.cwd, themeFile));
@@ -575,7 +581,6 @@ export async function runInit(ctx: CliContext, flags: InitFlags): Promise<number
       write(themeFile, themeText, themeLabel);
     }
 
-    const cssPath = resolveInsideReal(ctx.fs, ctx.cwd, config.tailwind.css);
     const css = ctx.fs.read(cssPath);
     if (css === undefined) {
       write(
@@ -608,7 +613,7 @@ export async function runInit(ctx: CliContext, flags: InitFlags): Promise<number
       }
     }
 
-    const added = await runAddForInit(ctx, config, flags);
+    const added = await runAddForInit(ctx, utils, flags);
     if (added !== OK) return added;
 
     const tooling: string[] = [];
@@ -622,12 +627,14 @@ export async function runInit(ctx: CliContext, flags: InitFlags): Promise<number
   }
 }
 
-/** `init` copies `utils` through the same pipeline as `add`. */
-async function runAddForInit(
-  ctx: CliContext,
-  config: ComponentsConfig,
-  flags: InitFlags,
-): Promise<number> {
+/** What `init` copies for `utils`, planned (and so path-checked) before `init` writes anything. */
+interface InitUtilsPlan {
+  readonly plan: ReturnType<typeof resolveItems>;
+  readonly entries: readonly FilePlan[];
+}
+
+/** Plans `utils` through the same pipeline as `add`. */
+function planInitUtils(ctx: CliContext, config: ComponentsConfig): InitUtilsPlan {
   const plan = resolveItems(ctx.registry.index, ["utils"]);
   // A project without the `@/*` alias yet still gets lib/utils at the conventional place; the
   // next steps tell the user to add the alias.
@@ -635,7 +642,16 @@ async function runAddForInit(
     ...readPathMappings(ctx.fs, ctx.cwd),
     { pattern: "@/*", targets: [join(ctx.cwd, "src", "*")] },
   ];
-  for (const entry of planFiles(ctx, config, plan.items, undefined, mappings)) {
+  return { plan, entries: planFiles(ctx, config, plan.items, undefined, mappings) };
+}
+
+/** `init` copies `utils` through the same pipeline as `add`. */
+async function runAddForInit(
+  ctx: CliContext,
+  { plan, entries }: InitUtilsPlan,
+  flags: InitFlags,
+): Promise<number> {
+  for (const entry of entries) {
     const where = display(ctx.cwd, entry.target);
     if (entry.status === "unchanged") {
       ctx.out(`  unchanged  ${where}`);
@@ -825,13 +841,14 @@ export function runDiff(ctx: CliContext, names: readonly string[]): number {
  */
 export interface RemoveFlags {
   readonly dryRun: boolean;
-  /** Remove even when another component in the project imports it. */
+  /** Remove even when another component in the project imports it, or a file was edited. */
   readonly force: boolean;
 }
 
 /**
  * Deletes components' files from the project. Refuses when another component that is in the
- * project imports one of them (unless `force`), and never removes npm packages.
+ * project imports one of them, and keeps (exit 1) a file that differs from the registry, because
+ * the user edited it; `force` overrides both. It never removes npm packages.
  *
  * @param ctx The CLI context.
  * @param names Component names.
@@ -866,6 +883,7 @@ export function runRemove(ctx: CliContext, names: readonly string[], flags: Remo
     ctx.report?.set("dryRun", flags.dryRun);
     ctx.report?.set("removed", []);
     let code = OK;
+    let kept = 0;
     for (const name of removing) {
       const blockers = dependentsOf(ctx.registry.index, name, installedNames).filter(
         (other) => !removing.includes(other),
@@ -882,14 +900,28 @@ export function runRemove(ctx: CliContext, names: readonly string[], flags: Remo
       }
       const item = findItem(ctx.registry.index, name);
       if (item === undefined) continue;
-      for (const file of item.files) {
-        const target = targetFor(item, file, config, mappings, ctx, undefined);
-        if (!ctx.fs.exists(target)) continue;
-        const where = display(ctx.cwd, target);
+      for (const entry of planFiles(ctx, config, [item], undefined, mappings)) {
+        if (entry.status === "create") continue;
+        const where = display(ctx.cwd, entry.target);
+        // A file the user edited is theirs: only `--force` deletes it.
+        if (entry.status === "differs" && !flags.force) {
+          kept += 1;
+          ctx.out(`  kept       ${where} (differs from the registry; pass --force to remove it)`);
+          ctx.report?.push("kept", { name, path: where });
+          continue;
+        }
         ctx.out(`  ${flags.dryRun ? "would remove" : "remove"}  ${where}`);
-        if (!flags.dryRun) ctx.fs.remove(target);
+        if (!flags.dryRun) ctx.fs.remove(entry.target);
         ctx.report?.push("removed", { name, path: where });
       }
+    }
+    if (kept > 0) {
+      problem(
+        ctx,
+        "SHADOW_UI_FILES_DIFFER",
+        `${kept} file(s) differ from the registry and were kept; pass --force to remove them.`,
+      );
+      code = FAILED;
     }
     return code;
   } catch (error) {

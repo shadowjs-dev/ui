@@ -3,8 +3,8 @@
  * guard that keeps every write inside the project. Pure except for the `ProjectFs` it is handed.
  * @packageDocumentation
  */
-import { isAbsolute, join, relative, resolve, sep } from "node:path";
-import type { ProjectFs } from "./fs";
+import { dirname, isAbsolute, join, relative, resolve, sep } from "node:path";
+import { ancestors, type ProjectFs } from "./fs";
 import { SchemaError } from "./schema";
 
 /**
@@ -109,9 +109,78 @@ function asRecord(value: unknown): Record<string, unknown> | undefined {
     : undefined;
 }
 
+/** The `extends` links followed from one tsconfig: far beyond any real chain. */
+const MAX_EXTENDS = 16;
+
+/** The `paths` and `baseUrl` a tsconfig ends up with once its `extends` are merged in. */
+interface PathOptions {
+  readonly paths?: Record<string, unknown>;
+  /** The folder of the config that declares `paths`. */
+  readonly pathsDir?: string;
+  /** Absolute. */
+  readonly baseUrl?: string;
+}
+
+/** The file an `extends` entry names, or `undefined`: a path, or a package looked up in `node_modules`. */
+function extendsFile(fs: ProjectFs, folder: string, entry: string): string | undefined {
+  const candidates = (base: string): string[] =>
+    base.endsWith(".json") ? [base] : [`${base}.json`, join(base, "tsconfig.json")];
+  if (entry.startsWith(".") || isAbsolute(entry)) {
+    return candidates(resolve(folder, entry)).find((file) => fs.exists(file));
+  }
+  for (const parent of ancestors(folder)) {
+    const found = candidates(join(parent, "node_modules", entry)).find((file) => fs.exists(file));
+    if (found !== undefined) return found;
+  }
+  return undefined;
+}
+
+/**
+ * The `paths` and `baseUrl` of one tsconfig with its `extends` merged in, as TypeScript does: later
+ * bases override earlier ones, the config itself overrides its bases, and `paths` is replaced as a
+ * whole. `seen` holds the chain so far, so a cycle or a very long chain ends.
+ */
+function readOptions(
+  fs: ProjectFs,
+  file: string,
+  label: string,
+  seen: readonly string[],
+): PathOptions | undefined {
+  const text = fs.read(file);
+  if (text === undefined) return undefined;
+  let parsed: unknown;
+  try {
+    parsed = parseJsonc(text);
+  } catch (error) {
+    if (error instanceof SyntaxError) {
+      throw new SchemaError(`${label} is not valid JSON: ${error.message}`);
+    }
+    throw error;
+  }
+  const config = asRecord(parsed);
+  const options = asRecord(config?.["compilerOptions"]);
+  const folder = dirname(file);
+  let merged: PathOptions = {};
+  const bases = [config?.["extends"]].flat();
+  for (const entry of seen.length < MAX_EXTENDS ? bases : []) {
+    const base = typeof entry === "string" ? extendsFile(fs, folder, entry) : undefined;
+    if (base !== undefined && !seen.includes(base)) {
+      merged = { ...merged, ...readOptions(fs, base, base, [...seen, base]) };
+    }
+  }
+  const paths = asRecord(options?.["paths"]);
+  const baseUrl = options?.["baseUrl"];
+  return {
+    ...merged,
+    ...(paths !== undefined && { paths, pathsDir: folder }),
+    ...(typeof baseUrl === "string" && { baseUrl: resolve(folder, baseUrl) }),
+  };
+}
+
 /**
  * Reads the `compilerOptions.paths` of the project's tsconfig files (`tsconfig.json`,
- * `tsconfig.app.json`). Targets are resolved against `baseUrl` or the config's directory.
+ * `tsconfig.app.json`), following their `extends` (relative files and packages in `node_modules`).
+ * Targets are resolved against `baseUrl` or the directory of the config that declares `paths`.
  *
  * @param fs The project filesystem.
  * @param root The project root.
@@ -125,22 +194,10 @@ function asRecord(value: unknown): Record<string, unknown> | undefined {
 export function readPathMappings(fs: ProjectFs, root: string): PathMapping[] {
   const mappings: PathMapping[] = [];
   for (const name of ["tsconfig.json", "tsconfig.app.json"]) {
-    const text = fs.read(join(root, name));
-    if (text === undefined) continue;
-    let parsed: unknown;
-    try {
-      parsed = parseJsonc(text);
-    } catch (error) {
-      if (error instanceof SyntaxError) {
-        throw new SchemaError(`${name} is not valid JSON: ${error.message}`);
-      }
-      throw error;
-    }
-    const options = asRecord(asRecord(parsed)?.["compilerOptions"]);
-    const paths = asRecord(options?.["paths"]);
+    const file = join(root, name);
+    const { paths, pathsDir, baseUrl } = readOptions(fs, file, name, [file]) ?? {};
     if (paths === undefined) continue;
-    const base =
-      typeof options?.["baseUrl"] === "string" ? resolve(root, options["baseUrl"]) : root;
+    const base = baseUrl ?? pathsDir ?? root;
     for (const [pattern, targets] of Object.entries(paths)) {
       if (!Array.isArray(targets)) continue;
       mappings.push({
@@ -170,25 +227,29 @@ export function readPathMappings(fs: ProjectFs, root: string): PathMapping[] {
  * @internal Not exported from `@shadow-js/ui`: part of the shadow-ui command, whose public surface is the CLI.
  */
 export function aliasToDirectory(alias: string, mappings: readonly PathMapping[]): string {
+  // TypeScript's rule: an exact pattern wins, otherwise the pattern with the longest prefix.
+  let best: { readonly length: number; readonly directory: string } | undefined;
   for (const { pattern, targets } of mappings) {
+    const target = targets[0];
+    if (target === undefined) continue;
     const star = pattern.indexOf("*");
     if (star === -1) {
-      if (pattern === alias && targets[0] !== undefined) return targets[0];
+      if (pattern === alias) return target;
       continue;
     }
     const prefix = pattern.slice(0, star);
     const suffix = pattern.slice(star + 1);
     if (
-      !alias.startsWith(prefix) ||
-      !alias.endsWith(suffix) ||
-      alias.length < prefix.length + suffix.length
+      alias.startsWith(prefix) &&
+      alias.endsWith(suffix) &&
+      alias.length >= prefix.length + suffix.length &&
+      (best === undefined || prefix.length > best.length)
     ) {
-      continue;
+      const rest = alias.slice(prefix.length, alias.length - suffix.length);
+      best = { length: prefix.length, directory: target.replace("*", rest) };
     }
-    const rest = alias.slice(prefix.length, alias.length - suffix.length);
-    const target = targets[0];
-    if (target !== undefined) return target.replace("*", rest);
   }
+  if (best !== undefined) return best.directory;
   throw new PathError(
     `The alias "${alias}" is not covered by "paths" in tsconfig.json. Add, for example:\n` +
       '  "compilerOptions": { "paths": { "@/*": ["./src/*"] } }',

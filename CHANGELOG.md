@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.0.3
+
+### Fixed
+
+- `shadow-ui init` checks every path (`components.json`, the theme file, the stylesheet, `lib/utils`) before it writes the first file, so a refused `--css ../outside.css` leaves the project untouched and a later `init` works.
+- Alias mapping uses the most specific `paths` pattern (the longest prefix, as TypeScript does), so `@/components/*` wins over `@/*`.
+- `paths` and `baseUrl` are read through `extends` (relative files, packages in `node_modules`, arrays), resolved from the config that declares them, with a bounded and cycle-safe chain.
+- The package manager is found in parent folders too (`packageManager` field and lockfiles, nearest folder wins), so a package in a workspace no longer gets npm.
+- `shadow-ui remove` keeps a file that differs from the registry (exit 1, named in the output and in `--json` as `kept`) unless `--force` is given.
+- `ThemeProvider` treats a `storage` event with a null key (`localStorage.clear()` in another tab) as the theme being removed and goes back to the default theme.
+
 ## 1.0.2
 
 ### Fixed

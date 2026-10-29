@@ -17,6 +17,29 @@ import { basename, dirname, join, resolve } from "node:path";
 /** Symbolic links followed while resolving one path; the same bound the operating system uses. */
 const MAX_LINK_HOPS = 40;
 
+/** Folders `ancestors` climbs at most: far beyond any real project, so a path loop cannot spin. */
+const MAX_LEVELS = 64;
+
+/**
+ * `start` and its parent folders up to the filesystem root, nearest first (at most 64).
+ *
+ * @param start An absolute folder.
+ * @returns The folders, `start` first.
+ * @example
+ * ancestors("/a/b"); // ["/a/b", "/a", "/"]
+ * @since 1.0.0
+ *
+ * @internal Not exported from `@shadow-js/ui`: part of the shadow-ui command, whose public surface is the CLI.
+ */
+export function ancestors(start: string): string[] {
+  const folders = [start];
+  for (let folder = dirname(start); folders.length < MAX_LEVELS; folder = dirname(folder)) {
+    if (folder === folders[folders.length - 1]) break;
+    folders.push(folder);
+  }
+  return folders;
+}
+
 /** Whether a failed file call means "nothing is there" (or a file stands where a directory should). */
 function isMissing(error: unknown): boolean {
   const code = (error as NodeJS.ErrnoException).code;

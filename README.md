@@ -123,7 +123,7 @@ primitive) without a version.
 | `--skip-install` | print the install command instead of running it |
 | `--path <dir>` | `add`: write `ui` components to `<dir>` instead of the configured alias |
 | `--all` / `-a` | `add`: every component |
-| `--force` | `remove`: even when another component in your project imports it |
+| `--force` | `remove`: even when another component in your project imports it, or a file differs from the registry (you edited it) |
 | `--cwd <dir>` | run in another directory |
 | `--json` | every command: print one JSON document on stdout instead of words, and ask nothing (see "Output for scripts") |
 | `--base-color <color>` | `init`: `neutral` (default), `zinc`, `slate`, `stone` or `gray` |
@@ -175,7 +175,7 @@ command: `ls` is `shadow-ui list`, `rm` is `shadow-ui remove`.
 | `add` | `dryRun`, `requested`, `dependencies` (what came with them), `files` (`path`, `action`: `create`, `unchanged`, `overwrite`, `kept` or `differs` for a dry run, plus the `diff` of a file that differs), `installs` |
 | `list` | `initialized` (is there a `components.json`), `items` (`name`, `type`, `description`, `installed`) |
 | `diff` | `components` (`name`, `path`, `status`: `up-to-date`, `differs` with its `diff`, or `missing`), `checked`, `differing` |
-| `remove` | `dryRun`, `removed` (`name`, `path`), `blocked` (`name`, `usedBy`) |
+| `remove` | `dryRun`, `removed` (`name`, `path`), `kept` (`name`, `path`: edited files), `blocked` (`name`, `usedBy`) |
 | `completion` | `shell`, `script` |
 | `--help`, `--version` | `usage`, `version` |
 
@@ -184,7 +184,7 @@ command: `ls` is `shadow-ui list`, `rm` is `shadow-ui remove`.
 `SHADOW_UI_MISSING_COMMAND`, `SHADOW_UI_INVALID_SHELL`, `SHADOW_UI_INVALID_BASE_COLOR`, `SHADOW_UI_NO_PROJECT` (no
 `package.json`), `SHADOW_UI_NO_CONFIG` (run `init` first), `SHADOW_UI_NO_COMPONENTS`, `SHADOW_UI_UNKNOWN_COMPONENT`,
 `SHADOW_UI_INVALID_NAME`, `SHADOW_UI_REGISTRY_CONFLICT`, `SHADOW_UI_INVALID_FILE`, `SHADOW_UI_UNSAFE_PATH`,
-`SHADOW_UI_FILES_DIFFER` (`add` kept a file), `SHADOW_UI_DIFFERS` (`diff` found a difference), `SHADOW_UI_IN_USE`
+`SHADOW_UI_FILES_DIFFER` (`add` or `remove` kept a file), `SHADOW_UI_DIFFERS` (`diff` found a difference), `SHADOW_UI_IN_USE`
 (`remove` refused), `SHADOW_UI_INSTALL_FAILED`, `SHADOW_UI_FAILED` and `SHADOW_UI_UNEXPECTED`.
 
 ```bash

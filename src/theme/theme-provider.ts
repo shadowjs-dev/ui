@@ -152,7 +152,8 @@ export function ThemeProvider(props: ThemeProviderProps): JsxChild {
       setSystemDark(event.matches);
     };
     const onStorage = (event: StorageEvent): void => {
-      if (event.key !== storageKey()) return;
+      // A null key is `storage.clear()`: the stored theme is gone, like a removed key.
+      if (event.key !== null && event.key !== storageKey()) return;
       setThemeState(isTheme(event.newValue) ? event.newValue : defaultTheme());
     };
     query.addEventListener("change", onSystemChange);
