@@ -1,7 +1,9 @@
 import { onCleanup, onMount, splitProps, useEffect, useSignal } from "@shadow-js/core";
 import {
+  callHandler,
   createPartContext,
   type Direction,
+  mergeElementProps,
   useDirectionAround,
   useRefSignal,
 } from "@shadow-js/primitives";
@@ -99,6 +101,7 @@ interface CarouselContextValue {
   readonly setViewport: (element: HTMLElement | undefined) => void;
   readonly claimSlide: () => number;
   readonly registerCount: () => void;
+  readonly releaseSlide: () => void;
   readonly pause: (paused: boolean) => void;
   readonly labels: () => ResolvedLabels;
   /** True once the carousel is mounted in the browser; the slide names wait for it (see CarouselItem). */
@@ -306,6 +309,12 @@ function Carousel(props: CarouselProps): JSX.Element {
   const [ready, setReady] = useSignal(false);
   let viewport: HTMLElement | undefined;
   let claimed = 0;
+  // The slide count the "reInit" listeners were last told, and whether the carousel is gone.
+  let reported = 0;
+  let disposed = false;
+  onCleanup(() => {
+    disposed = true;
+  });
   // The slide a programmatic move is heading for, until the scroll arrives there. While it is set,
   // the intermediate positions of a smooth scroll do not move the index back.
   let pending: number | undefined;
@@ -376,6 +385,27 @@ function Carousel(props: CarouselProps): JSX.Element {
       if (typeof viewport.scrollTo !== "function") viewport.scrollLeft = position * sign;
     }
   };
+  /** Tells the "reInit" listeners when the slide count differs from what they last heard. */
+  const announceCount = (): void => {
+    if (!ready()) return;
+    const total = count();
+    if (total === reported) return;
+    reported = total;
+    // Slides were removed: the current one may be gone.
+    if (total > 0 && index() > total - 1) setIndex(total - 1);
+    emit("reInit");
+  };
+  // A list that is replaced removes every slide and adds new ones in the same turn, and a carousel
+  // that unmounts removes them all: wait for the final count before telling anyone, once.
+  let announcing = false;
+  const scheduleAnnounce = (): void => {
+    if (!ready() || announcing) return;
+    announcing = true;
+    queueMicrotask(() => {
+      announcing = false;
+      if (!disposed) announceCount();
+    });
+  };
   const canPrevious = (): boolean => loops() || index() > 0;
   const canNext = (): boolean => loops() || index() < count() - 1;
 
@@ -402,9 +432,13 @@ function Carousel(props: CarouselProps): JSX.Element {
       return slot;
     },
     registerCount() {
-      const changed = claimed !== count();
       setCount(claimed);
-      if (changed && ready()) emit("reInit");
+      scheduleAnnounce();
+    },
+    releaseSlide() {
+      claimed = Math.max(0, claimed - 1);
+      setCount(claimed);
+      scheduleAnnounce();
     },
     pause: (value) => setPaused(value),
     labels,
@@ -436,6 +470,7 @@ function Carousel(props: CarouselProps): JSX.Element {
   onMount(() => {
     setRegionElement(regionNode);
     setReady(true);
+    reported = count();
     const start = opts().startIndex;
     if (start !== undefined && start > 0) scrollToIndex(start, true);
     (local.setApi as ((api: CarouselApi) => void) | undefined)?.(api);
@@ -445,7 +480,8 @@ function Carousel(props: CarouselProps): JSX.Element {
   // `autoplay` prop: changing it retimes the interval, and removing it stops the interval.
   useEffect(() => {
     const interval = local.autoplay as number | undefined;
-    if (interval === undefined || interval <= 0) return undefined;
+    // NaN and Infinity must not reach setInterval: a NaN delay fires every tick and an Infinity one wraps to 0.
+    if (interval === undefined || !Number.isFinite(interval) || interval <= 0) return undefined;
     if (typeof matchMedia === "function" && matchMedia("(prefers-reduced-motion: reduce)").matches)
       return undefined;
     const timer = setInterval(() => {
@@ -489,12 +525,24 @@ function Carousel(props: CarouselProps): JSX.Element {
         class={cn("relative", local.class)}
         onKeyDown={(event: KeyboardEvent) => {
           onKeyDown(event);
-          (local.onKeyDown as ((event: KeyboardEvent) => void) | undefined)?.(event);
+          callHandler(local.onKeyDown, event);
         }}
-        onPointerEnter={() => setPaused(true)}
-        onPointerLeave={() => setPaused(false)}
-        onFocusIn={() => setPaused(true)}
-        onFocusOut={() => setPaused(false)}
+        onPointerEnter={(event: PointerEvent) => {
+          callHandler(local.onPointerEnter, event);
+          setPaused(true);
+        }}
+        onPointerLeave={(event: PointerEvent) => {
+          callHandler(local.onPointerLeave, event);
+          setPaused(false);
+        }}
+        onFocusIn={(event: FocusEvent) => {
+          callHandler(local.onFocusIn, event);
+          setPaused(true);
+        }}
+        onFocusOut={(event: FocusEvent) => {
+          callHandler(local.onFocusOut, event);
+          setPaused(false);
+        }}
         {...rest}
       >
         {local.children as JSX.Element}
@@ -551,15 +599,15 @@ function CarouselContent(props: ComponentProps<"div">): JSX.Element {
         local.class,
       )}
       onScroll={(event: Event) => {
-        (local.onScroll as ((event: Event) => void) | undefined)?.(event);
+        callHandler(local.onScroll, event);
         carousel.scrolled();
       }}
       onWheel={(event: WheelEvent) => {
-        (local.onWheel as ((event: WheelEvent) => void) | undefined)?.(event);
+        callHandler(local.onWheel, event);
         carousel.userMoved();
       }}
       onPointerDown={(event: PointerEvent) => {
-        (local.onPointerDown as ((event: PointerEvent) => void) | undefined)?.(event);
+        callHandler(local.onPointerDown, event);
         carousel.userMoved();
         if (event.button !== 0 || event.pointerType === "touch") return;
         const element = event.currentTarget as HTMLElement;
@@ -630,12 +678,28 @@ function CarouselItem(props: ComponentProps<"div">): JSX.Element {
   // before the next one is counted; so a slide is named only once the carousel is mounted, and
   // the name then uses the final count (UI-CRS-18).
   carousel.registerCount();
+  // A slide that goes away (a list that shrinks or is replaced) no longer counts.
+  onCleanup(() => carousel.releaseSlide());
+  let node: HTMLElement | undefined;
+  // The position among the slides that exist now, from the DOM order: the slot a slide claimed when
+  // it rendered is stale once another slide has been removed or inserted before it.
+  const position = (): number => {
+    carousel.count();
+    const parent = node?.parentElement;
+    if (node === undefined || parent === null || parent === undefined) return slot + 1;
+    const slides = Array.from(parent.children).filter(
+      (child) => child.getAttribute("data-slot") === "carousel-item",
+    );
+    const at = slides.indexOf(node);
+    return at === -1 ? slot + 1 : at + 1;
+  };
+  const merged = mergeElementProps({ ref: (element: HTMLElement) => (node = element) }, rest);
   return (
     <div
       role="group"
       aria-roledescription="slide"
       aria-label={
-        carousel.ready() ? carousel.labels().slide(slot + 1, carousel.count()) : undefined
+        carousel.ready() ? carousel.labels().slide(position(), carousel.count()) : undefined
       }
       data-slot="carousel-item"
       class={cn(
@@ -643,7 +707,7 @@ function CarouselItem(props: ComponentProps<"div">): JSX.Element {
         carousel.orientation() === "vertical" ? "pt-4" : "ps-4",
         local.class,
       )}
-      {...rest}
+      {...merged}
     />
   );
 }
@@ -699,7 +763,7 @@ function CarouselPrevious(props: ComponentProps<"button">): JSX.Element {
       )}
       disabled={!carousel.canPrevious()}
       onClick={(event: MouseEvent) => {
-        (local.onClick as ((event: MouseEvent) => void) | undefined)?.(event);
+        callHandler(local.onClick, event);
         carousel.previous();
       }}
       {...rest}
@@ -764,7 +828,7 @@ function CarouselNext(props: ComponentProps<"button">): JSX.Element {
       )}
       disabled={!carousel.canNext()}
       onClick={(event: MouseEvent) => {
-        (local.onClick as ((event: MouseEvent) => void) | undefined)?.(event);
+        callHandler(local.onClick, event);
         carousel.next();
       }}
       {...rest}

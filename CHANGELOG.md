@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.0.2
+
+### Fixed
+
+- `Carousel` runs the `onPointerEnter`, `onPointerLeave`, `onFocusIn` and `onFocusOut` handlers you pass (they were dropped), takes `[handler, data]` tuples for its handlers and for `InputGroupAddon`'s `onClick`, and never starts autoplay with a `NaN` or infinite interval.
+- A carousel whose slides come and go (a list that shrinks, is filtered or is replaced) counts only the slides that exist: the "n of N" names, the indicators, `scrollSnapList()` and the current index follow the list, and `reInit` fires once after the change settles.
+- `ChartContainer` falls back to its default width for a `NaN` or infinite `initialWidth`, and a `ResizableHandle` that unmounts mid-drag stops listening to the pointer.
+- `shadow-ui add` refuses to write through a dangling symbolic link that points outside the project, reads `package.json`, `components.json` and tsconfig files that start with a byte order mark, reports a tsconfig that is not JSON as an invalid file instead of crashing, and treats the end of input (Ctrl-D) at a prompt as "no" instead of exiting with code 13.
+- `input-group` and `carousel` now import `callHandler` and `mergeElementProps` from `@shadow-js/primitives`; run `shadow-ui diff` to see the update for components you copied earlier.
+- `shadow-ui add --path <dir>` writes the imports between the copied ui components as `./name` when `<dir>` is not the directory the `ui` alias names (they used to import from the alias, a directory that does not hold them); with the default directory nothing changes.
+- `shadow-ui add` and `diff` keep at most 16 million array cells (64 MB) while diffing; two files that share almost nothing become one replacement instead of allocating gigabytes.
+- `ResizablePanelGroup` follows its panels: a panel that mounts after the first render takes its place in document order and a share of the 100 percent, a panel that unmounts gives its share back, and the handles keep resizing the panels on both sides of them. A remembered layout is brought inside the panels' `minSize` and `maxSize` and scaled to sum to 100 (one with a negative, infinite or missing size is ignored).
+- `ResizablePanelGroup`, `ResizablePanel` and `ResizableHandle` are tested to call a `ref` the application passes next to their own (they already did; the test pins it).
+- `shadow-ui add` can no longer write outside the project through a dangling relative symlink inside a linked folder: the path guard resolves the link's target from the folder's real place, as the operating system does, instead of from the folder as written.
+
 ## 1.0.1
 
 ### Changed

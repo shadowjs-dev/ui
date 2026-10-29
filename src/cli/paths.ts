@@ -5,6 +5,7 @@
  */
 import { isAbsolute, join, relative, resolve, sep } from "node:path";
 import type { ProjectFs } from "./fs";
+import { SchemaError } from "./schema";
 
 /**
  * Thrown when a path would leave the project or an alias cannot be mapped to a directory.
@@ -126,7 +127,16 @@ export function readPathMappings(fs: ProjectFs, root: string): PathMapping[] {
   for (const name of ["tsconfig.json", "tsconfig.app.json"]) {
     const text = fs.read(join(root, name));
     if (text === undefined) continue;
-    const options = asRecord(asRecord(parseJsonc(text))?.["compilerOptions"]);
+    let parsed: unknown;
+    try {
+      parsed = parseJsonc(text);
+    } catch (error) {
+      if (error instanceof SyntaxError) {
+        throw new SchemaError(`${name} is not valid JSON: ${error.message}`);
+      }
+      throw error;
+    }
+    const options = asRecord(asRecord(parsed)?.["compilerOptions"]);
     const paths = asRecord(options?.["paths"]);
     if (paths === undefined) continue;
     const base =

@@ -1,4 +1,5 @@
 import { splitProps } from "@shadow-js/core";
+import { callHandler } from "@shadow-js/primitives";
 import type { ComponentProps, JSX } from "@shadow-js/web";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
@@ -117,7 +118,7 @@ function InputGroupAddon(props: InputGroupAddonProps): JSX.Element {
   const [local, rest] = splitProps(props, ["class", "align", "onClick"]);
   // The application's own click handler runs first; the focus move is the default.
   const onClick = (event: MouseEvent): void => {
-    (local.onClick as ((event: MouseEvent) => void) | undefined)?.(event);
+    callHandler(local.onClick, event);
     const target = event.target;
     if (target instanceof Element && target.closest("button") !== null) return;
     const group = (event.currentTarget as HTMLElement).closest('[data-slot="input-group"]');

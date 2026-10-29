@@ -225,6 +225,27 @@ function targetFor(
   );
 }
 
+/**
+ * Whether ui components written with `--path` need relative imports between them: they do when that directory is not the one the
+ * `ui` alias names (the alias would point at a directory that does not hold them), or when the alias names no directory at all.
+ */
+function importsBetweenUiAreRelative(
+  ctx: CliContext,
+  config: ComponentsConfig,
+  mappings: readonly PathMapping[],
+  pathOverride: string | undefined,
+): boolean {
+  if (pathOverride === undefined) return false;
+  try {
+    return (
+      resolve(aliasToDirectory(config.aliases.ui, mappings)) !== resolve(ctx.cwd, pathOverride)
+    );
+  } catch (error) {
+    if (error instanceof PathError) return true;
+    throw error;
+  }
+}
+
 /** Builds the per-file plan for the items, reading what is on disk. */
 function planFiles(
   ctx: CliContext,
@@ -234,10 +255,13 @@ function planFiles(
   mappings: readonly PathMapping[] = readPathMappings(ctx.fs, ctx.cwd),
 ): FilePlan[] {
   const plans: FilePlan[] = [];
+  const relativeUi = importsBetweenUiAreRelative(ctx, config, mappings, pathOverride);
   for (const item of items) {
     for (const file of item.files) {
       const raw = ctx.registry.readFile(file.path);
-      const content = file.path.endsWith(".css") ? raw : rewriteImports(raw, config.aliases);
+      const content = file.path.endsWith(".css")
+        ? raw
+        : rewriteImports(raw, config.aliases, { relativeUi: relativeUi && item.type === "ui" });
       const target = targetFor(item, file, config, mappings, ctx, pathOverride);
       const current = ctx.fs.read(target);
       plans.push({

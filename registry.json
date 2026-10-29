@@ -1,6 +1,6 @@
 {
   "name": "@shadow-js/ui",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "frameworkDependencies": [
     "@shadow-js/core",
     "@shadow-js/primitives",
@@ -587,7 +587,9 @@
       ],
       "primitives": [
         "Direction",
+        "callHandler",
         "createPartContext",
+        "mergeElementProps",
         "useDirectionAround",
         "useRefSignal"
       ],
@@ -1061,7 +1063,7 @@
         "utils"
       ],
       "dependencies": {
-        "@shadow-js/table": "1.0.1"
+        "@shadow-js/table": "1.0.2"
       },
       "exports": [
         "DataTable",
@@ -1663,7 +1665,9 @@
         "InputGroupText",
         "InputGroupTextarea"
       ],
-      "primitives": [],
+      "primitives": [
+        "callHandler"
+      ],
       "tailwind": {
         "tokens": [
           "accent",

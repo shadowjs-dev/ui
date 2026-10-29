@@ -4,11 +4,11 @@
  */
 import { spawn } from "node:child_process";
 import { resolve } from "node:path";
-import { createInterface } from "node:readline/promises";
 import type { CliContext } from "./commands";
 import { nodeFs } from "./fs";
 import { installCrashHandlers, wantsJson } from "./json";
 import { main } from "./main";
+import { askYesNo } from "./prompt";
 import { loadRegistrySource } from "./registry-source";
 
 function realContext(cwd: string | undefined): CliContext {
@@ -22,13 +22,7 @@ function realContext(cwd: string | undefined): CliContext {
     err: (line) => process.stderr.write(`${line}\n`),
     async confirm(question) {
       if (!process.stdin.isTTY) return false;
-      const prompt = createInterface({ input: process.stdin, output: process.stdout });
-      try {
-        const answer = await prompt.question(`${question} (y/N) `);
-        return /^y(es)?$/i.test(answer.trim());
-      } finally {
-        prompt.close();
-      }
+      return askYesNo(question, process.stdin, process.stdout);
     },
     install: ({ cwd: directory, manager, packages, output }) =>
       new Promise<void>((done, reject) => {

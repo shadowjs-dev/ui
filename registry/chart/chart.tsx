@@ -220,7 +220,11 @@ function ChartContainer(props: ChartContainerProps): JSX.Element {
     "children",
   ]);
   const uiLocale = useUiLocale();
-  const [width, setWidth] = useSignal<number>((local.initialWidth as number | undefined) ?? 600);
+  // A NaN or Infinity width would put "NaN" into every path; fall back to the default instead.
+  const initial = local.initialWidth as number | undefined;
+  const [width, setWidth] = useSignal<number>(
+    initial !== undefined && Number.isFinite(initial) ? initial : 600,
+  );
   const [element, setElement] = useRefSignal<HTMLElement>();
   let node: HTMLElement | undefined;
   const dir = useDirectionAround(() => local.dir as Direction | undefined, element);

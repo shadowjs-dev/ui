@@ -12,24 +12,41 @@ type Operation = { readonly kind: "equal" | "insert" | "delete"; readonly line: 
  */
 export const MAX_DIFF_LINES = 20_000;
 
-/** The edit script turning `a` into `b`; one big replacement when the texts are too large. */
+/**
+ * The most array cells the edit script may keep to walk back from the end (4 bytes each, so 64 MB). Myers' algorithm keeps one
+ * frontier per edit, each 2d+1 wide, so it grows with the square of the number of differing lines; two files that share
+ * nothing would need gigabytes. Past the budget the diff is one replacement of the whole file instead.
+ *
+ * @internal Not exported from `@shadow-js/ui`: part of the shadow-ui command, whose public surface is the CLI.
+ */
+export const MAX_TRACE_CELLS = 16_000_000;
+
+/** The whole of `a` deleted and the whole of `b` inserted: always correct, never minimal. */
+function replacement(a: readonly string[], b: readonly string[]): Operation[] {
+  return [
+    ...a.map((line): Operation => ({ kind: "delete", line })),
+    ...b.map((line): Operation => ({ kind: "insert", line })),
+  ];
+}
+
+/** The edit script turning `a` into `b`; one big replacement when the texts are too large or too different. */
 function edits(a: readonly string[], b: readonly string[]): Operation[] {
   const n = a.length;
   const m = b.length;
   const max = n + m;
-  if (max > MAX_DIFF_LINES) {
-    return [
-      ...a.map((line): Operation => ({ kind: "delete", line })),
-      ...b.map((line): Operation => ({ kind: "insert", line })),
-    ];
-  }
+  if (max > MAX_DIFF_LINES) return replacement(a, b);
   const offset = max;
-  let frontier = new Int32Array(2 * max + 2);
-  const trace: Int32Array[] = [];
+  const frontier = new Int32Array(2 * max + 2);
+  /** The frontier before each round, only the diagonals the next round can read: `[offset - d - 1, offset + d + 1]`. */
+  const trace: { readonly from: number; readonly cells: Int32Array }[] = [];
+  let kept = 0;
   let reached = -1;
   for (let d = 0; d <= max && reached === -1; d += 1) {
-    trace.push(frontier.slice());
-    const next = frontier.slice();
+    const from = Math.max(0, offset - d - 1);
+    const cells = frontier.slice(from, Math.min(frontier.length, offset + d + 2));
+    kept += cells.length;
+    if (kept > MAX_TRACE_CELLS) return replacement(a, b);
+    trace.push({ from, cells });
     for (let k = -d; k <= d; k += 2) {
       let x: number;
       const below = frontier[offset + k - 1] ?? 0;
@@ -41,24 +58,26 @@ function edits(a: readonly string[], b: readonly string[]): Operation[] {
         x += 1;
         y += 1;
       }
-      next[offset + k] = x;
+      // Updated in place: a round reads only the other parity of diagonals, which it does not write.
+      frontier[offset + k] = x;
       if (x >= n && y >= m) {
         reached = d;
         break;
       }
     }
-    frontier = next;
   }
   const result: Operation[] = [];
   let x = n;
   let y = m;
   for (let d = reached; d > 0; d -= 1) {
-    const previous = trace[d] ?? new Int32Array(0);
+    const previous = trace[d];
+    const at = (index: number): number =>
+      previous === undefined ? 0 : (previous.cells[index - previous.from] ?? 0);
     const k = x - y;
-    const below = previous[offset + k - 1] ?? 0;
-    const above = previous[offset + k + 1] ?? 0;
+    const below = at(offset + k - 1);
+    const above = at(offset + k + 1);
     const previousK = k === -d || (k !== d && below < above) ? k + 1 : k - 1;
-    const previousX = previous[offset + previousK] ?? 0;
+    const previousX = at(offset + previousK);
     const previousY = previousX - previousK;
     while (x > previousX && y > previousY) {
       x -= 1;

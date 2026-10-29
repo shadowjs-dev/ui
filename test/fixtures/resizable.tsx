@@ -65,3 +65,22 @@ export function InRtlWrapper() {
     </div>
   );
 }
+
+/** Every part is given a ref by the application. */
+export function WithRefs(props: {
+  groupRef: (node: HTMLElement) => void;
+  panelRef: (node: HTMLElement) => void;
+  handleRef: (node: HTMLElement) => void;
+}) {
+  return (
+    <ResizablePanelGroup direction="horizontal" ref={props.groupRef}>
+      <ResizablePanel defaultSize={30} minSize={20} data-testid="left" ref={props.panelRef}>
+        Files
+      </ResizablePanel>
+      <ResizableHandle data-testid="handle" ref={props.handleRef} />
+      <ResizablePanel defaultSize={70} data-testid="right">
+        Editor
+      </ResizablePanel>
+    </ResizablePanelGroup>
+  );
+}

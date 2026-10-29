@@ -1,4 +1,4 @@
-import { onMount, splitProps, useSignal } from "@shadow-js/core";
+import { onCleanup, onMount, splitProps, useSignal } from "@shadow-js/core";
 import {
   createPartContext,
   type Direction,
@@ -51,6 +51,18 @@ export function resizeSizes(
   return next;
 }
 
+/** One panel as the group tracks it. @internal */
+interface PanelEntry {
+  readonly defaultSize: number;
+  readonly minSize: number;
+  readonly maxSize: number;
+  /** Set once a handle, a restored layout or a change of panels gave the panel a size; until then `defaultSize` applies. */
+  size: number | undefined;
+  element: HTMLElement | undefined;
+  /** Registered after the group had mounted: it still has to find its place among the panels that were there. */
+  late: boolean;
+}
+
 /** What the group shares with its panels and handles. @internal */
 interface ResizableContextValue {
   readonly direction: () => "horizontal" | "vertical";
@@ -58,12 +70,60 @@ interface ResizableContextValue {
   readonly sizes: () => number[];
   readonly min: () => number[];
   readonly max: () => number[];
-  readonly claimPanel: (defaultSize: number, minSize: number, maxSize: number) => number;
+  readonly claimPanel: (defaultSize: number, minSize: number, maxSize: number) => PanelEntry;
+  /** The place of a panel among the panels now, in document order. Reactive. */
+  readonly indexOf: (panel: PanelEntry) => number;
+  /** Called when a panel mounted: a panel that arrived late is put in its place and given its share. */
+  readonly placePanel: (panel: PanelEntry) => void;
+  /** Called when a panel unmounted: its share goes back to the others. */
+  readonly releasePanel: (panel: PanelEntry) => void;
+  /**
+   * The panel before a handle, as an index. Before the handle is in the document that is the number of panels rendered so far
+   * minus one (`fallback`); after, it is read from the document, so a panel that came or went moves the handle with it. Reactive.
+   */
+  readonly handleIndex: (handle: HTMLElement | undefined, fallback: number) => number;
   readonly move: (index: number, delta: number) => void;
   readonly set: (index: number, size: number) => void;
   /** How many panels have rendered so far: a handle sits after panel `n - 1`, so its index is `n - 1`. */
   readonly panelsClaimed: () => number;
   readonly storageKey: () => string | undefined;
+}
+
+const PRECEDING = 2;
+const FOLLOWING = 4;
+
+/**
+ * Brings sizes to what the group can show: scaled so they sum to 100, then each held within its panel's bounds with the
+ * difference spread over the panels that still have room. Best effort when the bounds cannot all be met (their minimums
+ * already add up to more than 100).
+ */
+function fitSizes(
+  sizes: readonly number[],
+  min: readonly number[],
+  max: readonly number[],
+): number[] {
+  const total = sizes.reduce((sum, size) => sum + size, 0);
+  if (!(total > 0)) return [...sizes];
+  const out = sizes.map((size) => (size * 100) / total);
+  const clampAll = (): void => {
+    for (let at = 0; at < out.length; at += 1) {
+      out[at] = Math.min(max[at] ?? 100, Math.max(min[at] ?? 0, out[at] ?? 0));
+    }
+  };
+  for (let pass = 0; pass <= out.length; pass += 1) {
+    clampAll();
+    const gap = 100 - out.reduce((sum, size) => sum + size, 0);
+    if (Math.abs(gap) < 1e-9) break;
+    const roomy: number[] = [];
+    for (let at = 0; at < out.length; at += 1) {
+      const size = out[at] ?? 0;
+      if (gap > 0 ? size < (max[at] ?? 100) : size > (min[at] ?? 0)) roomy.push(at);
+    }
+    if (roomy.length === 0) break;
+    for (const at of roomy) out[at] = (out[at] ?? 0) + gap / roomy.length;
+  }
+  clampAll();
+  return out;
 }
 
 /**
@@ -152,24 +212,48 @@ function ResizablePanelGroup(props: ResizablePanelGroupProps): JSX.Element {
   const [groupElement, setGroupElement] = useRefSignal<HTMLElement>();
   let groupNode: HTMLElement | undefined;
   const dir = useDirectionAround(() => local.dir as Direction | undefined, groupElement);
-  // The panels register their defaults while they render (plain arrays, no signal writes during a
-  // render). The sizes signal starts empty and is filled by the first change or the restore on mount.
-  const defaults: number[] = [];
-  const minimums: number[] = [];
-  const maximums: number[] = [];
-  const [sizes, setSizes] = useSignal<number[]>([]);
-  const currentSizes = (): number[] => {
-    const current = sizes();
-    return current.length > 0 ? current : [...defaults];
+  // The panels register while they render (plain array, no signal writes during a render), in document order. A panel that
+  // arrives or leaves later changes the array and bumps `version`, which everything that reads the sizes or places follows.
+  const panels: PanelEntry[] = [];
+  const [version, setVersion] = useSignal(0);
+  const touch = (): void => {
+    setVersion((count) => count + 1);
   };
-  let claimed = 0;
+  let mounted = false;
+  let disposed = false;
+  onCleanup(() => {
+    disposed = true;
+  });
+  const currentSizes = (): number[] => {
+    version();
+    return panels.map((panel) => panel.size ?? panel.defaultSize);
+  };
+  const minimums = (): number[] => {
+    version();
+    return panels.map((panel) => panel.minSize);
+  };
+  const maximums = (): number[] => {
+    version();
+    return panels.map((panel) => panel.maxSize);
+  };
+  const apply = (sizes: readonly number[]): void => {
+    panels.forEach((panel, at) => {
+      panel.size = sizes[at];
+    });
+    touch();
+  };
+  /** The sizes the panels have now, fitted to 100 and to their bounds: what a change of the panels leaves behind. */
+  const refit = (): void => {
+    if (panels.length === 0) return;
+    apply(fitSizes(currentSizes(), minimums(), maximums()));
+  };
   const storageKey = (): string | undefined =>
     local.autoSaveId === undefined
       ? undefined
       : `shadow-ui:resizable:${local.autoSaveId as string}`;
 
   const commit = (next: number[]): void => {
-    setSizes(next);
+    apply(next);
     (local.onLayout as ((sizes: number[]) => void) | undefined)?.(next);
     const key = storageKey();
     if (key === undefined) return;
@@ -183,6 +267,7 @@ function ResizablePanelGroup(props: ResizablePanelGroupProps): JSX.Element {
 
   // Restores the remembered sizes after mount, so the server and the first client render agree.
   onMount(() => {
+    mounted = true;
     setGroupElement(groupNode);
     const key = storageKey();
     if (key === undefined) return;
@@ -190,10 +275,11 @@ function ResizablePanelGroup(props: ResizablePanelGroupProps): JSX.Element {
       const saved: unknown = JSON.parse(localStorage.getItem(key) ?? "null");
       if (
         Array.isArray(saved) &&
-        saved.length === defaults.length &&
-        saved.every((value) => typeof value === "number")
+        saved.length === panels.length &&
+        saved.every((value) => typeof value === "number" && Number.isFinite(value) && value >= 0)
       ) {
-        setSizes(saved as number[]);
+        // Whatever is stored (edited by hand, saved by an older layout) is made to fit the bounds and the total.
+        apply(fitSizes(saved as number[], minimums(), maximums()));
       }
     } catch (error) {
       // A value that is not JSON is ignored and the defaults apply; the mismatch is reported.
@@ -205,25 +291,65 @@ function ResizablePanelGroup(props: ResizablePanelGroupProps): JSX.Element {
     direction,
     dir,
     sizes: currentSizes,
-    min: () => minimums,
-    max: () => maximums,
+    min: minimums,
+    max: maximums,
     claimPanel(defaultSize, minSize, maxSize) {
-      const index = claimed;
-      claimed += 1;
-      defaults.push(defaultSize);
-      minimums.push(minSize);
-      maximums.push(maxSize);
-      return index;
+      const panel: PanelEntry = {
+        defaultSize,
+        minSize,
+        maxSize,
+        size: undefined,
+        element: undefined,
+        late: mounted,
+      };
+      panels.push(panel);
+      return panel;
+    },
+    indexOf(panel) {
+      version();
+      return panels.indexOf(panel);
+    },
+    placePanel(panel) {
+      if (!panel.late || disposed) return;
+      panel.late = false;
+      // It was appended when it rendered; the document says where it really is.
+      panels.sort((first, second) => {
+        if (first.element === undefined || second.element === undefined) return 0;
+        return (first.element.compareDocumentPosition(second.element) & FOLLOWING) !== 0 ? -1 : 1;
+      });
+      refit();
+    },
+    releasePanel(panel) {
+      const at = panels.indexOf(panel);
+      if (at === -1) return;
+      panels.splice(at, 1);
+      if (disposed) return;
+      if (panels.length === 0) touch();
+      else refit();
+    },
+    handleIndex(handle, fallback) {
+      version();
+      if (handle === undefined || !mounted) return fallback;
+      let before = 0;
+      for (const panel of panels) {
+        if (
+          panel.element !== undefined &&
+          (handle.compareDocumentPosition(panel.element) & PRECEDING) !== 0
+        ) {
+          before += 1;
+        }
+      }
+      return Math.max(0, before - 1);
     },
     move(index, delta) {
-      commit(resizeSizes(currentSizes(), index, delta, minimums, maximums));
+      commit(resizeSizes(currentSizes(), index, delta, minimums(), maximums()));
     },
     set(index, size) {
       const current = currentSizes();
       const delta = size - (current[index] ?? 0);
-      commit(resizeSizes(current, index, delta, minimums, maximums));
+      commit(resizeSizes(current, index, delta, minimums(), maximums()));
     },
-    panelsClaimed: () => defaults.length,
+    panelsClaimed: () => panels.length,
     storageKey,
   };
 
@@ -301,16 +427,22 @@ function ResizablePanel(props: ResizablePanelProps): JSX.Element {
     "maxSize",
     "children",
   ]);
-  const index = group.claimPanel(
+  const panel = group.claimPanel(
     (local.defaultSize as number | undefined) ?? 50,
     (local.minSize as number | undefined) ?? 10,
     (local.maxSize as number | undefined) ?? 100,
   );
+  const index = (): number => group.indexOf(panel);
+  onMount(() => group.placePanel(panel));
+  onCleanup(() => group.releasePanel(panel));
   return (
     <div
+      ref={(node: HTMLElement) => {
+        panel.element = node;
+      }}
       data-slot="resizable-panel"
-      data-panel-index={index}
-      style={{ flex: `${group.sizes()[index] ?? 0} 1 0%`, minWidth: 0, minHeight: 0 }}
+      data-panel-index={index()}
+      style={{ flex: `${group.sizes()[index()] ?? 0} 1 0%`, minWidth: 0, minHeight: 0 }}
       class={cn("min-h-0 min-w-0 overflow-hidden", local.class)}
       {...rest}
     >
@@ -362,11 +494,15 @@ function ResizableHandle(props: ResizableHandleProps): JSX.Element {
   const group = resizableContext.use("ResizableHandle");
   const t = useUiStrings();
   const [local, rest] = splitProps(props, ["class", "withHandle"]);
-  // A handle sits right after the panel before it, so its index follows from the panels rendered.
-  const handleIndex = Math.max(0, group.panelsClaimed() - 1);
+  // A handle sits right after the panel before it: from the panels rendered so far, then from the document once it is there.
+  const fallbackIndex = Math.max(0, group.panelsClaimed() - 1);
+  let handleNode: HTMLElement | undefined;
+  const handleIndexNow = (): number => group.handleIndex(handleNode, fallbackIndex);
   const step = 5;
   const vertical = (): boolean => group.direction() === "vertical";
   let stopDrag: (() => void) | undefined;
+  // A handle that unmounts mid-drag (a panel closes) must not keep resizing from window listeners.
+  onCleanup(() => stopDrag?.());
 
   const startDrag = (event: PointerEvent): void => {
     if (event.button !== 0) return;
@@ -378,6 +514,7 @@ function ResizableHandle(props: ResizableHandleProps): JSX.Element {
     const box = (event.currentTarget as HTMLElement | null)?.parentElement?.getBoundingClientRect();
     const length = box === undefined ? 0 : vertical() ? box.height : box.width;
     const mirror = !vertical() && group.dir() === "rtl" ? -1 : 1;
+    const handleIndex = handleIndexNow();
     const startSize = group.sizes()[handleIndex] ?? 0;
     // Only the pointer that pressed the handle moves it; another finger is not part of this drag.
     const pointer = event.pointerId;
@@ -402,12 +539,15 @@ function ResizableHandle(props: ResizableHandleProps): JSX.Element {
 
   return (
     <div
+      ref={(node: HTMLElement) => {
+        handleNode = node;
+      }}
       role="separator"
       tabindex={0}
       aria-orientation={vertical() ? "horizontal" : "vertical"}
-      aria-valuenow={Math.round(group.sizes()[handleIndex] ?? 0)}
-      aria-valuemin={Math.round(group.min()[handleIndex] ?? 0)}
-      aria-valuemax={Math.round(group.max()[handleIndex] ?? 100)}
+      aria-valuenow={Math.round(group.sizes()[handleIndexNow()] ?? 0)}
+      aria-valuemin={Math.round(group.min()[handleIndexNow()] ?? 0)}
+      aria-valuemax={Math.round(group.max()[handleIndexNow()] ?? 100)}
       aria-label={t("resizable.handle", "Resize panels")}
       data-slot="resizable-handle"
       data-orientation={vertical() ? "vertical" : "horizontal"}
@@ -421,6 +561,7 @@ function ResizableHandle(props: ResizableHandleProps): JSX.Element {
       )}
       onPointerDown={(event: PointerEvent) => startDrag(event)}
       onKeyDown={(event: KeyboardEvent) => {
+        const handleIndex = handleIndexNow();
         const forward = vertical()
           ? "ArrowDown"
           : group.dir() === "rtl"
