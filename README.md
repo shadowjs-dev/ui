@@ -108,7 +108,7 @@ shadow-ui remove <name...> [--force]
 shadow-ui completion <bash|zsh|fish>   # print a tab-completion script (see below)
 ```
 
-`add` resolves `registryDependencies` (`alert-dialog` brings `button`, `dialog` brings `icons`; every component
+`add` resolves `registryDependencies` (`alert-dialog` brings `button`, `dialog` brings `icons`; nearly every component
 brings `utils`), rewrites the imports in the copied files to **your** aliases from `components.json`, writes only
 inside the project (an alias or `--path` that points outside is refused, symbolic links are resolved first), and
 installs the npm packages the files import that your `package.json` lacks: other packages at the exact versions the
@@ -570,15 +570,15 @@ Everything is documented with TSDoc in the sources.
 
 ## Links
 
-- [`@shadow-js/primitives`](https://primitives.shadowjs.net): the headless behavior under every component
+- [`@shadow-js/primitives`](https://primitives.shadowjs.net): the headless behavior under nearly every component
 - [`@shadow-js/forms`](https://forms.shadowjs.net): fields for the `form` item
 
 ## Dependencies
 
-- Runtime `@shadow-js/table` `1.0.0`: imported only as types by the data-table item (`registry/data-table/data-table.tsx`).
+- Runtime `@shadow-js/table` `1.0.4`: imported only as types by the data-table item (`registry/data-table/data-table.tsx`).
 - Runtime `class-variance-authority` `0.7.1`: `cva` and `VariantProps` (`src/index.ts`).
 - Runtime `clsx` `2.1.1` and `tailwind-merge` `3.7.0`: class merging behind `cn` (`registry/utils/utils.ts`).
-- Peers: `@shadow-js/core`, `@shadow-js/primitives`, and `@shadow-js/web` `^1.0.0`: the behavior and rendering under each component.
+- Peers: `@shadow-js/core`, `@shadow-js/primitives`, and `@shadow-js/web` `^1.0.3`: the behavior and rendering under each component.
 
 ## Types
 
