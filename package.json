@@ -1,6 +1,6 @@
 {
   "name": "@shadow-js/ui",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "shadcn-style components you add to your project with a CLI, styled with Tailwind v4",
   "license": "MIT",
   "type": "module",
@@ -60,22 +60,22 @@
     "check": "npm run lint && npm run typecheck && npm run build && npm test && npm run test:perf && npm run test:gc"
   },
   "peerDependencies": {
-    "@shadow-js/core": "^1.0.4",
-    "@shadow-js/primitives": "^1.0.4",
-    "@shadow-js/web": "^1.0.4"
+    "@shadow-js/core": "^1.0.5",
+    "@shadow-js/primitives": "^1.0.5",
+    "@shadow-js/web": "^1.0.5"
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.15",
-    "@shadow-js/compiler": "^1.0.4",
-    "@shadow-js/core": "^1.0.4",
-    "@shadow-js/forms": "^1.0.4",
-    "@shadow-js/primitives": "^1.0.4",
-    "@shadow-js/testing": "^1.0.4",
-    "@shadow-js/web": "^1.0.4",
+    "@shadow-js/compiler": "^1.0.5",
+    "@shadow-js/core": "^1.0.5",
+    "@shadow-js/forms": "^1.0.5",
+    "@shadow-js/primitives": "^1.0.5",
+    "@shadow-js/testing": "^1.0.5",
+    "@shadow-js/web": "^1.0.5",
     "@tailwindcss/node": "4.3.3",
     "@types/node": "^24.0.0",
     "fast-check": "^4.10.2",
-    "happy-dom": "^21.0.3",
+    "happy-dom": "21.0.4",
     "oxc-parser": "0.153.0",
     "shiki": "4.5.0",
     "tailwindcss": "4.3.3",
@@ -84,7 +84,7 @@
     "vitest": "5.0.3"
   },
   "dependencies": {
-    "@shadow-js/table": "1.0.4",
+    "@shadow-js/table": "1.0.5",
     "class-variance-authority": "0.7.1",
     "clsx": "2.1.1",
     "tailwind-merge": "3.7.0"

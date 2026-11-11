@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.5
+
+### Fixed
+
+- Calendar month names and the DatePicker round trip follow the Gregorian grid in every locale.
+- The message formatter's per-locale caches are bounded.
+
 ## 1.0.4
 
 ### Changed

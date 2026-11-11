@@ -302,7 +302,7 @@ it("starts from the system, toggles the html class and remembers the choice", ()
 
 `ThemeProvider` persists the choice in `localStorage`, follows `prefers-color-scheme` while the theme is
 `"system"`, syncs between tabs, and is SSR-safe: it touches nothing before it has mounted, so `resolvedTheme()`
-is `undefined` on the server and on the first client render (hydration never mismatches). If the browser blocks
+is `undefined` on the server and on the first client render, and the resolved theme is applied after mount. If the browser blocks
 `localStorage`, the choice still applies for the current page.
 
 **No flash**: `themeScript()` returns a dependency-free ES5 script as text; put it in a `<script>` in `<head>` and the
@@ -578,7 +578,7 @@ Everything is documented with TSDoc in the sources.
 - Runtime `@shadow-js/table` `1.0.4`: imported only as types by the data-table item (`registry/data-table/data-table.tsx`).
 - Runtime `class-variance-authority` `0.7.1`: `cva` and `VariantProps` (`src/index.ts`).
 - Runtime `clsx` `2.1.1` and `tailwind-merge` `3.7.0`: class merging behind `cn` (`registry/utils/utils.ts`).
-- Peers: `@shadow-js/core`, `@shadow-js/primitives`, and `@shadow-js/web` `^1.0.3`: the behavior and rendering under each component.
+- Peers: `@shadow-js/core`, `@shadow-js/primitives`, and `@shadow-js/web` `^1.0.5`: the behavior and rendering under each component.
 
 ## Types
 

@@ -174,6 +174,12 @@ function parseMessage(message: string): readonly Piece[] {
   return sequence(false, false);
 }
 
+/**
+ * Most locales each of the caches below keeps. A locale often comes from a request header or a URL, so the
+ * set is not the app's own: a full cache starts over instead of growing with every new tag. @internal
+ */
+const MAX_CACHED_LOCALES = 128;
+
 const RTL_LANGUAGES = new Set(["ar", "he", "fa", "ur", "ps", "sd", "ug", "yi", "dv", "ckb", "ks"]);
 const DIRECTIONS = new Map<string, boolean>();
 
@@ -192,6 +198,7 @@ function isRightToLeft(locale: string): boolean {
       if (!(error instanceof RangeError)) throw error;
       known = false;
     }
+    if (DIRECTIONS.size >= MAX_CACHED_LOCALES) DIRECTIONS.clear();
     DIRECTIONS.set(locale, known);
   }
   return known;
@@ -214,6 +221,7 @@ function numberFormat(locale: string, style: string | undefined): Intl.NumberFor
           ? { maximumFractionDigits: 0 }
           : undefined,
     );
+    if (NUMBER_FORMATS.size >= MAX_CACHED_LOCALES) NUMBER_FORMATS.clear();
     NUMBER_FORMATS.set(key, format);
   }
   return format;
@@ -246,6 +254,7 @@ function write(
       let rules = PLURAL_RULES.get(locale);
       if (rules === undefined) {
         rules = new Intl.PluralRules(locale);
+        if (PLURAL_RULES.size >= MAX_CACHED_LOCALES) PLURAL_RULES.clear();
         PLURAL_RULES.set(locale, rules);
       }
       const shifted = count - piece.offset;

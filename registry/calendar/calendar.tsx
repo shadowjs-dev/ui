@@ -67,7 +67,12 @@ export interface CalendarLabels {
 
 /** The month names of a locale, from `Intl` (January first). @internal */
 function monthNames(locale: string): string[] {
-  const format = new Intl.DateTimeFormat(locale, { month: "long", timeZone: "UTC" });
+  // Gregorian months: the grid is Gregorian, and a locale such as fa-IR defaults to a calendar whose months differ.
+  const format = new Intl.DateTimeFormat(locale, {
+    month: "long",
+    timeZone: "UTC",
+    calendar: "gregory",
+  });
   return Array.from({ length: 12 }, (_, index) =>
     format.format(new Date(Date.UTC(2000, index, 15))),
   );
